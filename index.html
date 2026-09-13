@@ -1,0 +1,1223 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#F6F8FB">
+<title>광합성 산물 확인하기 · 가상 실험</title>
+<meta name="description" content="햇빛을 받은 상추 잎과 어둠상자 속 상추 잎을 에탄올로 탈색하고 아이오딘-아이오딘화 칼륨 용액을 떨어뜨려 현미경으로 관찰하는 가상 탐구 실험입니다.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="광합성 산물 확인하기 · 가상 실험">
+<meta property="og:description" content="상추 잎을 탈색하고 아이오딘-아이오딘화 칼륨 용액으로 녹말을 확인하는 가상 실험 · 현미경 관찰">
+<meta property="og:image" content="https://kimju1416.github.io/photosynthesis-starch-kimcheon/assets/og.jpg">
+<meta property="og:url" content="https://kimju1416.github.io/photosynthesis-starch-kimcheon/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<style>
+:root{
+  --pt:#2456A6; --pt-h:#1C4487; --bg:#F6F8FB; --card:#fff; --line:#E3E9F2;
+  --tx:#1B2A41; --sub:#64748B; --ok:#1D7A4D; --okbg:#E7F3EC; --err:#C0392B; --errbg:#F9E8E6; --warn:#B26B0F;
+  --r1:10px; --r2:14px; --bar:60px; --u:7px;
+}
+*{box-sizing:border-box}
+html{-webkit-tap-highlight-color:transparent}
+html,body{margin:0}
+body{background:var(--bg);color:var(--tx);font-family:'Pretendard Variable','Pretendard',-apple-system,'Malgun Gothic',sans-serif;font-size:15px;line-height:1.6;word-break:keep-all;-webkit-text-size-adjust:100%}
+button,input{font:inherit;color:inherit;touch-action:manipulation}
+[hidden]{display:none!important}
+
+/* ── 앱바 ── */
+.appbar{position:sticky;top:0;z-index:60;height:var(--bar);display:flex;align-items:center;gap:16px;padding:0 max(20px, env(safe-area-inset-right)) 0 max(20px, env(safe-area-inset-left));background:var(--bg);border-bottom:1px solid var(--line)}
+.appbar h1{margin:0;font-size:17px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.appbar .sp{flex:1}
+.tabs{display:flex;gap:4px;padding:4px;background:#E8EDF4;border-radius:var(--r2);flex:none}
+.tab{height:42px;padding:0 14px;border:0;border-radius:var(--r1);background:none;color:var(--sub);font-size:14px;font-weight:600;cursor:pointer;white-space:nowrap}
+.tab b{font-weight:700;margin-right:6px}
+.tab[aria-selected="true"]{background:#fff;color:var(--pt);box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.tab.locked{color:#9AA6B5}
+.btn-text{border:0;background:none;color:var(--sub);font-size:14px;font-weight:600;padding:8px 4px;cursor:pointer;min-height:44px;white-space:nowrap}
+
+/* ── 화면 ── */
+.screen{display:none;gap:16px;padding:16px max(20px, env(safe-area-inset-right)) 16px max(20px, env(safe-area-inset-left));max-width:1680px;margin:0 auto;align-items:start}
+.screen.on{display:grid}
+.col{display:flex;flex-direction:column;gap:12px;min-width:0}
+#s1{grid-template-columns:220px minmax(0,1fr) 292px}
+#s2{grid-template-columns:minmax(0,1.62fr) minmax(290px,1fr);height:calc(100dvh - var(--bar));padding-bottom:0}
+#s3{grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);height:calc(100dvh - var(--bar));padding-bottom:0}
+#s2 .col,#s3 .col{height:100%;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-bottom:16px}
+.stage-title{margin:0;font-size:18px;font-weight:700;line-height:1.4}
+.stage-wrap{width:min(100%, calc((100dvh - var(--bar) - 32px - var(--below)) * 1.5));margin:0 auto}
+#s1 .stage-wrap{--below:100px}
+#s2 .stage-wrap{--below:44px}
+
+.card{background:var(--card);border:1px solid var(--line);border-radius:var(--r2);padding:16px}
+.sec{font-size:13px;font-weight:600;color:var(--sub);letter-spacing:.02em;margin:0 0 8px}
+.btn{height:48px;padding:0 20px;border-radius:var(--r1);border:1px solid var(--line);background:#fff;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap}
+.btn.primary{background:var(--pt);border-color:var(--pt);color:#fff}
+.btn.primary:hover{background:var(--pt-h)}
+.btn:disabled{background:#E8EDF4;border-color:#E8EDF4;color:#8795a8;cursor:default}
+.btn.block{width:100%}
+.hint{font-size:13px;color:var(--sub);line-height:1.5;margin:10px 0 0}
+.note{font-size:12px;color:var(--sub);line-height:1.5;margin:8px 0 0}
+
+/* ── 1단계: 준비물 ── */
+.parts{display:flex;flex-direction:column;gap:8px}
+.part{position:relative;display:flex;align-items:center;gap:10px;width:100%;min-height:68px;padding:8px 10px;border:1px solid var(--line);border-radius:var(--r1);background:#fff;text-align:left;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;transition:border-color .15s,box-shadow .15s,opacity .15s}
+.part .th{flex:none;width:50px;height:50px;border-radius:var(--r1);background:#EEF2F6;display:grid;place-items:center;overflow:hidden;pointer-events:none}
+.part .th img{max-width:44px;max-height:44px;object-fit:contain;-webkit-user-drag:none}
+.part .th .sunth{width:34px;height:34px;border-radius:50%;background:radial-gradient(circle,#fffef2 0,#fff1a8 35%,#ffcf4d 62%,#f7b52c 100%);box-shadow:0 0 12px 4px rgba(255,200,70,.55)}
+.part .tx{min-width:0;pointer-events:none}
+.part b{display:block;font-size:14px;font-weight:700;line-height:1.35}
+.part small{display:block;font-size:12px;color:var(--sub);line-height:1.35}
+.part .ck{flex:none;margin-left:auto;width:22px;height:22px;border-radius:50%;border:1px solid #D3DBE5;pointer-events:none}
+.part.sel{border-color:var(--pt);box-shadow:0 0 0 3px rgba(36,86,166,.16)}
+.part.wait{opacity:.55}
+.part.done{cursor:default;background:#F6F8FB;opacity:1}
+.part.done .th img,.part.done .th .sunth{opacity:.4}
+.part.done b{color:var(--sub)}
+.part.done .ck,.steps li.done::before{border-color:var(--ok);background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center/13px no-repeat}
+.pfoot .btn{width:100%;margin-top:12px}
+
+.status{display:flex;align-items:center;gap:10px;min-height:52px;padding:6px 8px 6px 14px;border-radius:var(--r1);background:#fff;border:1px solid var(--line);font-size:15px;font-weight:600}
+.status .no{flex:none;font-size:12px;font-weight:700;color:#fff;background:var(--pt);border-radius:6px;padding:1px 8px}
+.status .tx{flex:1;min-width:0}
+.status .btn{height:40px;padding:0 16px}
+.status.ok{background:var(--okbg);border-color:#CBE5D5;color:var(--ok)}
+.status.ok .no{background:var(--ok)}
+
+.steps{list-style:none;margin:0;padding:0}
+.steps li{position:relative;padding:0 0 12px 34px;font-size:14px;line-height:1.5;color:var(--sub)}
+.steps li:last-child{padding-bottom:0}
+.steps li::before{content:attr(data-n);position:absolute;left:0;top:0;width:24px;height:24px;border-radius:50%;border:1px solid #CFD8E3;background:#fff;color:var(--sub);font-size:12px;font-weight:700;display:grid;place-items:center}
+.steps li b{display:block;font-weight:700;color:var(--tx)}
+.steps li.now::before{border-color:var(--pt);background:var(--pt);color:#fff}
+.steps li.now b{color:var(--pt)}
+.steps li.done::before{content:""}
+
+/* ── 실험대 공통 ── */
+.stage{position:relative;width:100%;aspect-ratio:3/2;border-radius:var(--r2);overflow:hidden;border:1px solid var(--line);background:#cfd3d2;isolation:isolate;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.stage .bg{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:0;pointer-events:none}
+.obj{position:absolute;pointer-events:none;transform:translate(var(--dx,0px),var(--dy,0px)) rotate(var(--rot,0deg))}
+.obj>img{display:block;width:100%;height:100%;-webkit-user-drag:none}
+.obj.real>img{filter:saturate(.95) brightness(.98) contrast(.98)}
+.obj.gone{visibility:hidden;opacity:0}
+.obj.anim{transition:left .55s cubic-bezier(.3,.7,.2,1),top .55s cubic-bezier(.3,.7,.2,1),width .55s cubic-bezier(.3,.7,.2,1),height .55s cubic-bezier(.3,.7,.2,1),transform .6s cubic-bezier(.3,.7,.2,1)}
+.obj.in{animation:settle .6s cubic-bezier(.25,.8,.25,1) both}
+@keyframes settle{from{opacity:0;transform:translateY(-8%) scale(.97)}to{opacity:1;transform:none}}
+.obj.active{pointer-events:auto;cursor:grab;touch-action:none}
+.obj.active::after{content:"";position:absolute;left:50%;top:50%;width:max(100%,48px);height:max(100%,48px);transform:translate(-50%,-50%)}
+.obj.active:not(.tube)>img{filter:drop-shadow(0 0 5px rgba(36,86,166,.75)) drop-shadow(0 0 1px #fff)}
+.obj.dragging{cursor:grabbing;z-index:40!important}
+.obj.dragging>img{filter:drop-shadow(0 12px 14px rgba(0,0,0,.3))!important}
+.shade{position:absolute;z-index:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(closest-side,rgba(20,24,28,.32),rgba(20,24,28,.14) 60%,rgba(20,24,28,0));pointer-events:none;transition:opacity .3s}
+.shade.gone{opacity:0}
+
+.zone{position:absolute;z-index:9;border:2px dashed rgba(36,86,166,.9);border-radius:var(--r1);background:rgba(240,245,252,.4);padding:0;cursor:pointer;touch-action:manipulation}
+.zone span{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);white-space:nowrap;font-size:max(11px, calc(var(--u) * 1.45));font-weight:700;color:var(--pt-h);background:rgba(255,255,255,.94);border-radius:6px;padding:0 7px;line-height:1.6;pointer-events:none}
+.zone.round{border-radius:50%}
+.zone.want{border-style:solid;animation:pulse 1.4s ease-in-out infinite}
+.zone.hot{background:rgba(36,86,166,.24);border-style:solid}
+.zone.done{display:none}
+@keyframes pulse{50%{background:rgba(36,86,166,.2)}}
+.tzone{position:absolute;z-index:11;border:2px dashed rgba(36,86,166,.9);border-radius:var(--r1);background:rgba(36,86,166,.06);pointer-events:none;animation:pulse 1.6s ease-in-out infinite}
+.tzone span{position:absolute;left:50%;top:100%;transform:translate(-50%,4px);white-space:nowrap;font-size:max(10px, calc(var(--u) * 1.3));font-weight:700;color:var(--pt-h);background:rgba(255,255,255,.94);border-radius:6px;padding:0 6px;line-height:1.6}
+.tzone.up span{top:auto;bottom:100%;transform:translate(-50%,-4px)}
+
+.plate{position:absolute;z-index:20;left:2.2%;top:3.4%;display:flex;align-items:center;gap:calc(var(--u)*.9);padding:calc(var(--u)*.75) calc(var(--u)*1.7);background:#1F2B38;color:#fff;border-radius:6px;border:1px solid rgba(255,255,255,.16);box-shadow:0 2px 8px rgba(0,0,0,.28);font-size:max(12px, calc(var(--u) * 1.9));font-weight:700;letter-spacing:.06em;line-height:1.3;pointer-events:none;white-space:nowrap}
+.plate::before{content:"";width:calc(var(--u)*.55);min-width:4px;align-self:stretch;border-radius:2px;background:#7FB069}
+.tag{position:absolute;z-index:16;transform:translate(-50%,-50%);padding:0 calc(var(--u)*.7);border-radius:6px;background:rgba(255,255,255,.95);border:1px solid rgba(27,42,65,.2);font-size:max(10px, calc(var(--u) * 1.3));font-weight:700;color:var(--tx);line-height:1.7;white-space:nowrap;pointer-events:none;box-shadow:0 1px 3px rgba(0,0,0,.14)}
+.tag.key{min-width:calc(var(--u)*2.4);text-align:center;font-weight:800}
+.ghost-drag{position:fixed;z-index:200;left:0;top:0;pointer-events:none;transform:translate(-50%,-50%);filter:drop-shadow(0 10px 14px rgba(0,0,0,.28));opacity:.95}
+.ghost-drag.sunth{border-radius:50%;background:radial-gradient(circle,#fffef2 0,#fff1a8 35%,#ffcf4d 62%,rgba(247,181,44,0) 72%)}
+
+/* ── 1단계: 햇빛 · 시계 ── */
+.sun{position:absolute;z-index:7;border-radius:50%;pointer-events:none;background:radial-gradient(circle,#fffffa 0,#fff6c8 26%,#ffe27a 44%,rgba(255,214,90,.55) 56%,rgba(255,210,90,0) 72%);filter:drop-shadow(0 0 calc(var(--u)*2.5) rgba(255,226,130,.9))}
+.sun::after{content:"";position:absolute;inset:-40%;border-radius:50%;background:radial-gradient(circle,rgba(255,240,190,.45),rgba(255,240,190,0) 65%);animation:glow 3s ease-in-out infinite}
+@keyframes glow{50%{transform:scale(1.08);opacity:.8}}
+.sunlight{position:absolute;inset:0;z-index:6;pointer-events:none;opacity:0;transition:opacity 1.2s}
+.stage.sunny .sunlight{opacity:1}
+.sunlight .warm{position:absolute;inset:0;background:radial-gradient(circle at var(--sx,20%) var(--sy,25%), rgba(255,238,175,.6), rgba(255,238,175,0) 62%);mix-blend-mode:screen}
+.sunlight svg{position:absolute;inset:0;width:100%;height:100%;mix-blend-mode:screen;filter:blur(6px)}
+.stage.sunny .obj.plant>img{filter:saturate(1.08) brightness(1.07)}
+.wclock{position:absolute;z-index:12;display:flex;flex-direction:column;align-items:center;gap:calc(var(--u)*.6);pointer-events:none}
+.wclock svg{display:block;width:100%;height:auto;filter:drop-shadow(0 3px 6px rgba(0,0,0,.35))}
+.wclock .ct{background:rgba(20,24,30,.86);color:#fff;border-radius:6px;padding:calc(var(--u)*.3) calc(var(--u)*1);font-size:max(11px, calc(var(--u) * 1.55));font-weight:700;white-space:nowrap;font-variant-numeric:tabular-nums;line-height:1.4}
+.wclock.spin .ct{background:var(--pt)}
+.wclock.done .ct{background:var(--ok)}
+
+/* ── 2단계: 시험관 · 잎 · 말풍선 ── */
+.tube .liq{position:absolute;left:var(--il,24%);right:var(--il,24%);bottom:var(--ib,2.5%);height:0;border-radius:0 0 999px 999px;background:rgba(206,224,236,.55);transition:height 1.1s ease,background 3.2s ease}
+.tube .liq::before{content:"";position:absolute;left:0;right:0;top:0;height:max(2px, calc(var(--u)*.22));background:rgba(255,255,255,.75)}
+.tube.filled .liq{height:var(--fill,48%)}
+.tube.green .liq{background:rgba(92,158,46,.58)}
+.tube>img{position:absolute;inset:0}
+.tube .tl{position:absolute;left:50%;top:14%;transform:translateX(-50%);min-width:calc(var(--u)*1.9);padding:0 2px;background:#fff;border:1px solid rgba(0,0,0,.2);border-radius:3px;font-size:max(9px, calc(var(--u) * 1.15));font-weight:800;line-height:1.5;text-align:center}
+.leaf>img{position:absolute;inset:0;transition:opacity 3.2s ease}
+.leaf .l-bleached,.leaf .l-after{opacity:0}
+.leaf.bleach .l-fresh{opacity:0}
+.leaf.bleach .l-bleached{opacity:1}
+.leaf.iod>img{transition-duration:1.8s}
+.leaf.iod .l-bleached{opacity:0}
+.leaf.iod .l-after{opacity:1}
+.lbl{position:absolute;left:50%;top:58%;transform:translate(-50%,-50%);font-size:max(9px, calc(var(--u) * 1.25));font-weight:800;color:#1B2A41;white-space:nowrap;pointer-events:none}
+#tg-iodine{width:11.5%;white-space:normal;text-align:center;line-height:1.35;padding:2px 4px}
+.steam{position:absolute;z-index:9;pointer-events:none}
+.steam i{position:absolute;bottom:0;width:38%;height:62%;border-radius:50%;background:radial-gradient(closest-side,rgba(255,255,255,.8),rgba(255,255,255,0));filter:blur(3px);opacity:0;animation:steam 3.4s ease-out infinite}
+.steam i:nth-child(1){left:6%}
+.steam i:nth-child(2){left:34%;animation-delay:1.1s}
+.steam i:nth-child(3){left:60%;animation-delay:2.2s}
+.steam.hot i{animation-duration:2.1s}
+@keyframes steam{0%{transform:translateY(25%) scale(.6);opacity:0}30%{opacity:.85}100%{transform:translateY(-95%) scale(1.35);opacity:0}}
+
+.bubble{position:absolute;z-index:14;background:#fff;border:1.5px solid #C4CFDC;border-radius:12px;padding:calc(var(--u)*.7);box-shadow:0 4px 14px rgba(20,30,45,.2);opacity:0;visibility:hidden;pointer-events:none;transition:left .45s cubic-bezier(.3,.7,.2,1),opacity .35s}
+.bubble.show{opacity:1;visibility:visible}
+.bubble .bh{display:flex;align-items:center;gap:calc(var(--u)*.5);font-size:max(10px, calc(var(--u) * 1.3));font-weight:700;line-height:1.3;white-space:nowrap;margin:0 0 calc(var(--u)*.55)}
+.bubble .bh i{font-style:normal;flex:none;width:1.6em;height:1.6em;border-radius:50%;background:var(--pt);color:#fff;display:grid;place-items:center;font-size:.9em}
+.bubble .bc{font-size:max(10px, calc(var(--u) * 1.2));color:var(--sub);text-align:center;margin-top:calc(var(--u)*.45);white-space:nowrap;font-weight:600}
+.bubble .sm{display:none}
+/* 좁은 실험대(휴대폰): 말풍선을 작게 — 짧은 제목, 설명 줄 숨김, 명패 아래로 */
+.stage.narrow .bubble{padding:3px;border-radius:8px}
+.stage.narrow .bubble .bh{font-size:9px;margin-bottom:2px;gap:3px}
+.stage.narrow .bubble .lg,.stage.narrow .bubble .bc{display:none}
+.stage.narrow .bubble .sm{display:inline}
+.stage.narrow #tg-iodine{width:auto;white-space:nowrap}
+.scope{position:relative;width:100%;aspect-ratio:1;border-radius:50%;overflow:hidden;background:#15181c}
+.scope img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity 3s ease}
+.scope img.on{opacity:1}
+.scope::after{content:"";position:absolute;inset:0;border-radius:50%;box-shadow:inset 0 0 0 calc(var(--u)*.35) #1b1f24, inset 0 0 calc(var(--u)*2.2) calc(var(--u)*.7) rgba(0,0,0,.5);pointer-events:none}
+.tails{position:absolute;inset:0;width:100%;height:100%;z-index:13;pointer-events:none;overflow:visible}
+.tails polygon{fill:#fff;stroke:#C4CFDC;stroke-width:1.5;vector-effect:non-scaling-stroke}
+.pipette{position:absolute;z-index:30;width:1.7%;pointer-events:none;transform:translate(-50%,-100%);display:none;filter:drop-shadow(0 6px 8px rgba(0,0,0,.28));transition:left .45s cubic-bezier(.3,.7,.2,1),top .45s cubic-bezier(.3,.7,.2,1)}
+.pipette.show{display:block}
+.pipette.follow{transition:none}
+.pipette img{display:block;width:100%;height:auto}
+.drop{position:absolute;z-index:29;width:.75%;aspect-ratio:3/4;border-radius:50% 50% 50% 50% / 60% 60% 40% 40%;background:radial-gradient(circle at 35% 35%,#b86a3e,#5a240c);transform:translate(-50%,-50%);opacity:0;pointer-events:none}
+.ring{position:absolute;z-index:12;border:2px dashed rgba(36,86,166,.95);border-radius:50%;pointer-events:none;animation:pulse 1.4s ease-in-out infinite}
+
+/* ── 2단계: 과정 카드 ── */
+#s2Card h2{margin:0 0 4px;font-size:20px;font-weight:700;line-height:1.35}
+#s2Card p{margin:0}
+.legend2{display:grid;gap:4px;margin-top:10px;padding:10px 12px;border-radius:var(--r1);background:#F1F4F8;font-size:13px}
+.legend2 span{display:flex;align-items:center;gap:8px}
+.legend2 i{font-style:normal;flex:none;width:20px;height:20px;border-radius:50%;background:var(--pt);color:#fff;font-size:11px;font-weight:800;display:grid;place-items:center}
+.safety{margin-top:10px;padding:10px 12px;border-radius:var(--r1);background:#FBF0DE;color:#7A4A08;font-size:13px;line-height:1.5}
+.progress{height:4px;background:#E8EDF4;border-radius:2px;overflow:hidden;margin:12px 0 0}
+.progress i{display:block;height:100%;width:0;background:var(--pt);transition:width .4s}
+
+/* ── 3단계: 탐구 결과 ── */
+.figs{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px}
+.fig{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px}
+.fig .scope{width:min(100%, 300px);--u:6px}
+.fig figcaption{display:flex;align-items:center;gap:8px;font-size:15px;font-weight:700;text-align:center}
+.fig figcaption i{font-style:normal;flex:none;width:24px;height:24px;border-radius:50%;background:var(--pt);color:#fff;font-size:12px;display:grid;place-items:center}
+.fig .dishleaf{display:flex;align-items:center;gap:8px;font-size:12px;color:var(--sub)}
+.fig .dishleaf img{width:42px;height:auto}
+.qblock+.qblock{margin-top:14px;padding-top:14px;border-top:1px solid var(--line)}
+.qline{display:flex;align-items:center;gap:8px;flex-wrap:wrap;padding:5px 0;font-size:15px;line-height:1.9}
+.qline .fl{font-weight:700;min-width:170px}
+.choices{display:inline-flex;align-items:center;gap:6px;flex-wrap:wrap}
+.paren{color:var(--sub);font-weight:600}
+.choice{height:42px;padding:0 14px;border:1px solid #CDD6E1;border-radius:var(--r1);background:#fff;font-size:15px;font-weight:600;cursor:pointer;white-space:nowrap}
+.choice[aria-pressed="true"]{border-color:var(--pt);background:#EAF0F9;color:var(--pt)}
+.right .choice[aria-pressed="true"]{border-color:var(--ok);background:var(--okbg);color:var(--ok)}
+.wrong .choice[aria-pressed="true"]{border-color:var(--err);background:var(--errbg);color:var(--err)}
+.sentence{font-size:16px;line-height:2.4;margin:4px 0 0}
+.know{padding:10px 14px;border-radius:var(--r1);background:#F4F6FA;font-size:15px;line-height:2.3}
+.know .star{font-weight:800;color:var(--warn);margin-right:4px}
+.blank{display:inline-flex;align-items:center;gap:6px;vertical-align:middle}
+.blank input{width:6.2em;height:42px;padding:0 8px;border:0;border-bottom:2px solid #9FB0C4;border-radius:8px 8px 0 0;background:#EEF2F7;text-align:center;font-size:17px;font-weight:600;color:#9AA6B5;outline:none}
+.blank input::placeholder{color:#B8C2CE;font-weight:600;opacity:1}
+.blank input:focus{border-bottom-color:var(--pt);background:#E6EEF9}
+.blank.filled input{color:var(--tx);font-weight:800}
+.blank.right input{color:var(--ok);border-bottom-color:var(--ok);background:var(--okbg)}
+.blank.wrong input{color:var(--err);border-bottom-color:var(--err);background:var(--errbg)}
+.mark{flex:none;display:none;align-items:center;gap:6px;height:34px;padding:0 13px 0 7px;border-radius:17px;font-style:normal;font-size:16px;font-weight:800;line-height:1;white-space:nowrap;vertical-align:middle;animation:pop .35s cubic-bezier(.2,.9,.3,1.25) both}
+.mark::before{content:"";width:20px;height:20px;border-radius:50%}
+.right>.mark{display:inline-flex;background:var(--okbg);color:var(--ok)}
+.right>.mark::before{background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12l5 5L20 7'/%3E%3C/svg%3E") center/13px no-repeat}
+.right>.mark::after{content:"정답"}
+.wrong>.mark{display:inline-flex;background:var(--errbg);color:var(--err)}
+.wrong>.mark::before{background:var(--err) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='3' stroke-linecap='round'%3E%3Cpath d='M7 7l10 10M17 7L7 17'/%3E%3C/svg%3E") center/12px no-repeat}
+.wrong>.mark::after{content:"오답"}
+.verdict{display:flex;align-items:center;gap:16px;padding:18px 20px;border-radius:var(--r2);background:var(--ok);color:#fff;animation:pop .5s cubic-bezier(.2,.9,.3,1.25) both}
+.verdict .vi{flex:none;width:56px;height:56px;border-radius:50%;background:#fff;color:var(--ok);display:grid;place-items:center}
+.verdict .vi svg{width:32px;height:32px}
+.verdict strong{display:block;font-size:32px;font-weight:800;line-height:1.2;letter-spacing:-.01em}
+.verdict span{display:block;font-size:15px;font-weight:600;opacity:.92;margin-top:2px}
+@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:none}}
+
+.toast{position:fixed;left:50%;bottom:calc(24px + env(safe-area-inset-bottom));transform:translateX(-50%);z-index:300;background:rgba(20,20,20,.9);color:#fff;font-size:14px;padding:10px 16px;border-radius:var(--r1);max-width:calc(100% - 40px);opacity:0;pointer-events:none;transition:opacity .2s}
+.toast.show{opacity:1}
+
+@media (pointer:coarse){
+  body{font-size:16px}
+  .btn{height:52px;font-size:16px}
+  .choice{height:46px}
+  .tab{height:44px}
+}
+/* 폭이 좁은 화면(세로 태블릿 포함) */
+@media (max-width:1023px){
+  #s1{grid-template-columns:1fr}
+  #s1 .stage-wrap{width:100%}
+  .parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
+  .pfoot{display:flex;align-items:center;gap:12px;margin-top:10px}
+  .pfoot .hint{flex:1;margin:0}
+  .pfoot .btn{width:auto;margin:0;flex:none}
+  .col-guide{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:start}
+  .tab{padding:0 10px;font-size:13px}
+}
+@media (orientation:portrait) and (min-width:600px){
+  #s2{grid-template-columns:1fr;height:auto;padding-bottom:16px}
+  #s2 .col{height:auto;overflow:visible;padding-bottom:0}
+  #s2 .stage-wrap{width:100%}
+  #s3{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:12px;padding-left:12px;padding-right:12px}
+  .qline .fl{min-width:0;flex-basis:100%}
+}
+/* 휴대폰(세로) */
+@media (max-width:599px), (max-width:767px) and (orientation:portrait){
+  :root{--bar:auto}
+  .appbar{height:auto;flex-wrap:wrap;gap:6px;padding:8px 12px}
+  .appbar h1{font-size:15px;flex:1}
+  .appbar .sp{display:none}
+  .tabs{flex-basis:100%;order:3}
+  .tab{flex:1;padding:0 4px;font-size:12px}
+  .tab b{display:block;margin:0;line-height:1.2}
+  .tab{line-height:1.2}
+  .screen{padding:10px}
+  #s2,#s3{grid-template-columns:1fr;height:auto;padding-bottom:10px}
+  #s2 .col,#s3 .col{height:auto;overflow:visible;padding-bottom:0}
+  .stage-wrap{width:100%!important}
+  .part{flex-direction:column;align-items:center;text-align:center;gap:4px;min-height:0;padding:8px 6px}
+  .part .ck{position:absolute;margin:0;top:5px;right:5px;width:16px;height:16px}
+  .part small{display:none}
+  .pfoot{flex-direction:column;align-items:stretch}
+  .col-guide{grid-template-columns:1fr}
+  .stage-title{font-size:16px}
+  .qline .fl{min-width:0;flex-basis:100%}
+  .verdict strong{font-size:26px}
+  .figs{grid-template-columns:1fr 1fr;gap:10px}
+  .fig figcaption{font-size:13px;gap:5px}
+  .fig figcaption i{width:20px;height:20px;font-size:11px}
+  .fig .dishleaf{font-size:11px}
+  .fig .dishleaf img{width:30px}
+}
+@media (prefers-reduced-motion:reduce){
+  .obj.in,.zone.want,.tzone,.ring,.mark,.verdict,.sun::after,.steam i{animation:none}
+}
+</style>
+</head>
+<body>
+
+<header class="appbar">
+  <h1>광합성 산물 확인하기</h1>
+  <span class="sp"></span>
+  <nav class="tabs" role="tablist" aria-label="실험 단계">
+    <button class="tab" role="tab" id="tab-s1" data-tab="s1" aria-selected="true" type="button"><b>1단계</b>실험 설치</button>
+    <button class="tab locked" role="tab" id="tab-s2" data-tab="s2" aria-selected="false" type="button"><b>2단계</b>실험 과정·현미경 관찰</button>
+    <button class="tab locked" role="tab" id="tab-s3" data-tab="s3" aria-selected="false" type="button"><b>3단계</b>탐구 결과</button>
+  </nav>
+  <button class="btn-text" id="resetAll" type="button">처음부터</button>
+</header>
+
+<!-- ───────── 1단계: 실험 설치 ───────── -->
+<main class="screen on" id="s1" role="tabpanel" aria-labelledby="tab-s1">
+  <aside class="col col-parts">
+    <div class="card">
+      <p class="sec">준비물</p>
+      <div class="parts">
+        <button class="part" type="button" data-part="lettuce"><span class="th"><img src="assets/lettuce.webp" alt="" draggable="false"></span><span class="tx"><b>상추 모종</b><small id="potLeft">2개 · 두 자리에 놓기</small></span><i class="ck"></i></button>
+        <button class="part" type="button" data-part="box"><span class="th"><img src="assets/darkbox.webp" alt="" draggable="false"></span><span class="tx"><b>어둠상자</b><small>빛을 막는 상자</small></span><i class="ck"></i></button>
+        <button class="part" type="button" data-part="sun"><span class="th"><i class="sunth"></i></span><span class="tx"><b>햇빛</b><small>하늘에 놓기</small></span><i class="ck"></i></button>
+      </div>
+      <div class="pfoot">
+        <p class="hint">끌어다 놓거나, 준비물을 누른 뒤 실험대의 점선 자리를 눌러도 됩니다.</p>
+      </div>
+    </div>
+  </aside>
+
+  <section class="col col-stage">
+    <h2 class="stage-title">실험 과정에 따라 실험을 설치하세요.</h2>
+    <div class="stage-wrap">
+      <div class="stage" id="stage1" aria-label="실험 설치">
+        <img class="bg" src="assets/bg-garden.webp" alt="" draggable="false">
+        <span class="shade gone" id="sh1-0"></span>
+        <span class="shade gone" id="sh1-1"></span>
+        <div class="obj real plant gone" id="o1-pot0"><img src="assets/lettuce.webp" alt="" draggable="false"></div>
+        <div class="obj real plant gone" id="o1-pot1"><img src="assets/lettuce.webp" alt="" draggable="false"></div>
+        <div class="obj real gone" id="o1-box"><img src="assets/darkbox.webp" alt="" draggable="false"></div>
+        <div class="sunlight" aria-hidden="true">
+          <i class="warm"></i>
+          <svg viewBox="0 0 150 100" preserveAspectRatio="none">
+            <defs>
+              <linearGradient id="beam1" gradientUnits="userSpaceOnUse">
+                <stop offset="0" stop-color="#fff6d2" stop-opacity=".75"/>
+                <stop offset="1" stop-color="#ffeeb0" stop-opacity=".08"/>
+              </linearGradient>
+            </defs>
+            <polygon id="beam1-0" fill="url(#beam1)"/>
+            <polygon id="beam1-1" fill="url(#beam1)"/>
+          </svg>
+        </div>
+        <div class="sun gone" id="o1-sun" style="position:absolute"></div>
+
+        <button class="zone" type="button" data-zone="pot0"><span>상추 모종</span></button>
+        <button class="zone" type="button" data-zone="pot1"><span>상추 모종</span></button>
+        <button class="zone" type="button" data-zone="box0"><span>어둠상자</span></button>
+        <button class="zone" type="button" data-zone="box1"><span>어둠상자</span></button>
+        <button class="zone round" type="button" data-zone="sun"><span>햇빛</span></button>
+
+        <span class="tag" id="t1-0" hidden></span>
+        <span class="tag" id="t1-1" hidden></span>
+        <div class="wclock" id="clock1">
+          <svg viewBox="0 0 100 100" aria-hidden="true">
+            <circle cx="50" cy="50" r="49" fill="#2A2F35"/>
+            <circle cx="50" cy="50" r="45" fill="#FBFAF6"/>
+            <g id="ticks"></g>
+            <g id="nums" font-family="Pretendard Variable, Pretendard, sans-serif" font-size="9" font-weight="700" fill="#1B2A41" text-anchor="middle" dominant-baseline="central"></g>
+            <g id="hHand"><line x1="50" y1="54" x2="50" y2="27" stroke="#1B2A41" stroke-width="3.6" stroke-linecap="round"/></g>
+            <g id="mHand"><line x1="50" y1="56" x2="50" y2="15" stroke="#1B2A41" stroke-width="2.4" stroke-linecap="round"/></g>
+            <circle cx="50" cy="50" r="2.8" fill="#C0392B"/>
+          </svg>
+          <span class="ct" id="clockText">0시간 지남</span>
+        </div>
+        <div class="plate">김천여중 실험실</div>
+      </div>
+    </div>
+    <div class="status" id="st1">
+      <span class="no" id="st1No">1</span>
+      <span class="tx" id="st1Tx">상추 모종 2개를 점선 자리에 놓으세요.</span>
+      <button class="btn primary" id="waitBtn" type="button" hidden>24시간 두기</button>
+    </div>
+  </section>
+
+  <aside class="col col-guide">
+    <div class="card">
+      <p class="sec">실험 과정</p>
+      <ol class="steps" id="steps1">
+        <li data-n="1"><b>상추 모종 2개 준비하기</b><span>상추 모종 2개를 끌어서 탁자 위 두 자리에 놓습니다.</span></li>
+        <li data-n="2"><b>어둠상자 씌우기</b><span>상추 모종 2개 중 1개에 어둠상자를 씌웁니다.</span></li>
+        <li data-n="3"><b>햇빛 비추기</b><span>햇빛을 끌어서 하늘에 놓습니다.</span></li>
+        <li data-n="4"><b>24시간 두기</b><span>버튼을 누르면 24시간이 지납니다. 오른쪽 시계를 보세요.</span></li>
+      </ol>
+    </div>
+    <div class="go">
+      <button class="btn primary block" id="go2" type="button" disabled>2단계로 이동</button>
+    </div>
+  </aside>
+</main>
+
+<!-- ───────── 2단계: 실험 과정 · 현미경 관찰 ───────── -->
+<main class="screen" id="s2" role="tabpanel" aria-labelledby="tab-s2">
+  <section class="col col-exp">
+    <h2 class="stage-title">실험 과정에 따라 실험하고, 말풍선의 현미경 관찰 화면을 보세요.</h2>
+    <div class="stage-wrap">
+      <div class="stage" id="stage2" aria-label="실험대">
+        <img class="bg" src="assets/bg-lab.webp" alt="" draggable="false">
+        <div id="shades2"></div>
+        <div class="obj real" id="o2-hotplate"><img src="assets/hotplate.webp" alt="" draggable="false"></div>
+        <div class="obj" id="o2-dishA"><img src="assets/petri.webp" alt="" draggable="false"></div>
+        <div class="obj" id="o2-dishB"><img src="assets/petri.webp" alt="" draggable="false"></div>
+        <div class="obj leaf" id="o2-leafA" role="button" aria-label="상추 잎 A"><img class="l-fresh" src="assets/leaf.webp" alt="" draggable="false"><img class="l-bleached" src="assets/leaf-bleached.webp" alt="" draggable="false"><img class="l-after" src="assets/leaf-blue.webp" alt="" draggable="false"></div>
+        <div class="obj leaf" id="o2-leafB" role="button" aria-label="상추 잎 B"><img class="l-fresh" src="assets/leaf.webp" alt="" draggable="false"><img class="l-bleached" src="assets/leaf-bleached.webp" alt="" draggable="false"><img class="l-after" src="assets/leaf-none.webp" alt="" draggable="false"></div>
+        <div class="obj tube" id="o2-tubeA" role="button" aria-label="시험관 A"><i class="liq"></i><img src="assets/tube.webp" alt="" draggable="false"><span class="tl">A</span></div>
+        <div class="obj tube" id="o2-tubeB" role="button" aria-label="시험관 B"><i class="liq"></i><img src="assets/tube.webp" alt="" draggable="false"><span class="tl">B</span></div>
+        <div class="obj real" id="o2-rack"><img src="assets/rack.webp" alt="" draggable="false"></div>
+        <div class="obj" id="o2-beaker"><img src="assets/beaker.webp" alt="" draggable="false"></div>
+        <div class="steam" id="steam"><i></i><i></i><i></i></div>
+        <div class="obj real" id="o2-ethanol" role="button" aria-label="에탄올"><img src="assets/ethanol.webp" alt="" draggable="false"><span class="lbl">에탄올</span></div>
+        <div class="obj real" id="o2-iodine" role="button" aria-label="아이오딘-아이오딘화 칼륨 용액"><img src="assets/iodine.webp" alt="" draggable="false"></div>
+
+        <span class="tag key" id="tg-leafA">A</span>
+        <span class="tag key" id="tg-leafB">B</span>
+        <span class="tag key" id="tg-dishA">A</span>
+        <span class="tag key" id="tg-dishB">B</span>
+        <span class="tag" id="tg-beaker">뜨거운 물</span>
+        <span class="tag" id="tg-iodine">아이오딘-아이오딘화 칼륨 용액</span>
+        <div id="tz2"></div>
+        <i class="ring" id="ringA" hidden></i>
+        <i class="ring" id="ringB" hidden></i>
+
+        <svg class="tails" viewBox="0 0 150 100" preserveAspectRatio="none" aria-hidden="true"><polygon id="tailA"/><polygon id="tailB"/></svg>
+        <div class="bubble" id="bub-A" aria-live="polite">
+          <p class="bh"><i>A</i><span class="lg">햇빛을 받은 잎</span><span class="sm">햇빛 받음</span></p>
+          <div class="scope"><img class="on" data-s="fresh" src="assets/cells-fresh.webp" alt="현미경으로 본 잎 세포"><img data-s="bleached" src="assets/cells-bleached.webp" alt=""><img data-s="after" src="assets/cells-blue.webp" alt=""></div>
+          <p class="bc">탈색 전 잎 세포</p>
+        </div>
+        <div class="bubble" id="bub-B" aria-live="polite">
+          <p class="bh"><i>B</i><span class="lg">햇빛을 받지 않은 잎</span><span class="sm">햇빛 못 받음</span></p>
+          <div class="scope"><img class="on" data-s="fresh" src="assets/cells-fresh.webp" alt="현미경으로 본 잎 세포"><img data-s="bleached" src="assets/cells-bleached.webp" alt=""><img data-s="after" src="assets/cells-none.webp" alt=""></div>
+          <p class="bc">탈색 전 잎 세포</p>
+        </div>
+        <div class="pipette" id="pipette"><img src="assets/dropper.webp" alt="" draggable="false"></div>
+        <i class="drop" id="drop"></i>
+        <div class="plate">김천여중 실험실</div>
+      </div>
+    </div>
+  </section>
+
+  <aside class="col col-proc">
+    <div class="card" id="s2Card">
+      <p class="sec" id="s2No">실험 과정 5</p>
+      <h2 id="s2Title">시험관에 에탄올 넣기</h2>
+      <p id="s2Text"></p>
+      <div class="legend2">
+        <span><i>A</i>햇빛을 받은 상추 모종의 잎</span>
+        <span><i>B</i>어둠상자를 씌운(햇빛을 받지 않은) 상추 모종의 잎</span>
+      </div>
+      <p class="safety" id="safety" hidden>에탄올은 불이 붙기 쉬워 불꽃으로 직접 가열하지 않고, 뜨거운 물이 든 비커에 넣어 데웁니다.</p>
+      <div class="progress"><i id="s2Bar"></i></div>
+    </div>
+    <div class="card">
+      <p class="sec">실험 과정</p>
+      <ol class="steps" id="steps2">
+        <li data-n="5"><b>시험관에 에탄올 넣기</b></li>
+        <li data-n="6"><b>시험관에 상추 잎 넣기</b></li>
+        <li data-n="7"><b>뜨거운 물이 든 비커에 시험관 넣기</b></li>
+        <li data-n="8"><b>상추 잎을 페트리 접시로 옮기기</b></li>
+        <li data-n="9"><b>아이오딘-아이오딘화 칼륨 용액 떨어뜨리기</b></li>
+      </ol>
+    </div>
+    <button class="btn primary block" id="go3" type="button" disabled>다음 화면 · 탐구 결과</button>
+    <button class="btn block" id="reset2" type="button">2단계 다시 하기</button>
+  </aside>
+</main>
+
+<!-- ───────── 3단계: 탐구 결과 ───────── -->
+<main class="screen" id="s3" role="tabpanel" aria-labelledby="tab-s3">
+  <section class="col col-figs">
+    <div class="card">
+      <p class="sec">현미경 관찰 결과</p>
+      <div class="figs">
+        <figure class="fig">
+          <div class="scope"><img class="on" src="assets/cells-blue.webp" alt="햇빛을 받은 잎 조각을 현미경으로 본 모습"></div>
+          <figcaption><i>A</i>햇빛을 받은 잎 조각</figcaption>
+          <span class="dishleaf"><img src="assets/leaf-blue.webp" alt="">페트리 접시의 잎</span>
+        </figure>
+        <figure class="fig">
+          <div class="scope"><img class="on" src="assets/cells-none.webp" alt="햇빛을 받지 않은 잎 조각을 현미경으로 본 모습"></div>
+          <figcaption><i>B</i>햇빛을 받지 않은 잎 조각</figcaption>
+          <span class="dishleaf"><img src="assets/leaf-none.webp" alt="">페트리 접시의 잎</span>
+        </figure>
+      </div>
+      <p class="note">탈색한 잎 조각에 아이오딘-아이오딘화 칼륨 용액을 떨어뜨린 뒤 현미경으로 관찰한 모습입니다.</p>
+    </div>
+  </section>
+
+  <section class="col col-qs">
+    <div class="card" id="qCard">
+      <div class="qblock">
+        <p class="sec">관찰 결과</p>
+        <div class="qline"><span class="fl">햇빛을 받은 잎 조각</span>
+          <span class="choices" data-q="obsA"><span class="paren">(</span><button class="choice" type="button" data-v="blue">청람색</button><button class="choice" type="button" data-v="none">변화 없음</button><span class="paren">)</span><i class="mark"></i></span></div>
+        <div class="qline"><span class="fl">햇빛을 받지 않은 잎 조각</span>
+          <span class="choices" data-q="obsB"><span class="paren">(</span><button class="choice" type="button" data-v="blue">청람색</button><button class="choice" type="button" data-v="none">변화 없음</button><span class="paren">)</span><i class="mark"></i></span></div>
+      </div>
+
+      <div class="qblock">
+        <p class="sec">탐구 결과 정리</p>
+        <p class="know"><span class="star">★ 미리 알아두기</span>
+          아이오딘-아이오딘화 칼륨 용액은 <span class="blank" data-q="starch1"><input type="text" inputmode="text" autocomplete="off" aria-label="아이오딘-아이오딘화 칼륨 용액과 반응하는 물질"><i class="mark"></i></span> 과(와) 반응하면 청람색으로 변한다.</p>
+        <p class="sentence"><b>탐구를 바탕으로 알 수 있는 사실</b><br>
+          아이오딘-아이오딘화 칼륨 용액을 떨어뜨리면
+          <span class="choices" data-q="fact"><span class="paren">(</span><button class="choice" type="button" data-v="sun">햇빛을 받은 잎 조각</button><button class="choice" type="button" data-v="dark">햇빛을 받지 않은 잎 조각</button><span class="paren">)</span><i class="mark"></i></span>
+          에서만 청람색으로 변한다.</p>
+      </div>
+
+      <div class="qblock">
+        <p class="sec">탐구 결론</p>
+        <p class="sentence">광합성 산물은 <span class="blank" data-q="glucose"><input type="text" autocomplete="off" placeholder="포도당" aria-label="광합성 산물"><i class="mark"></i></span> 이고, 포도당은 <span class="blank" data-q="starch2"><input type="text" autocomplete="off" placeholder="녹말" aria-label="포도당이 바뀌는 물질"><i class="mark"></i></span> 로 바뀐다.</p>
+        <p class="note">흐린 글씨를 따라 입력하면 진하게 바뀝니다.</p>
+      </div>
+    </div>
+    <div class="verdict" id="verdict3" role="status" hidden>
+      <span class="vi" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12l5 5L20 7"/></svg></span>
+      <div><strong>정답입니다</strong><span>탐구 결과를 모두 바르게 정리했습니다.</span></div>
+    </div>
+    <button class="btn block" id="reset3" type="button">답 지우기</button>
+  </section>
+</main>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ───────── 공통 ───────── */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => [...r.querySelectorAll(s)];
+const PHONE = '(max-width:599px), (max-width:767px) and (orientation:portrait)';
+/* 그림 비율(높이/폭). 파일을 읽으면 실제 값으로 바뀐다 */
+const AR = { lettuce:900/714, darkbox:1.08, ethanol:1.9, tube:6.4, rack:.5, beaker:1.02, hotplate:.56, petri:.38, iodine:2.3, dropper:5.2, leaf:.92 };
+function toast(msg){
+  const t = $('#toast'); t.textContent = msg; t.classList.add('show');
+  clearTimeout(toast.h); toast.h = setTimeout(() => t.classList.remove('show'), 2600);
+}
+/* 실험대 %: x 가운데, b 바닥선, w 폭. 실험대는 3:2라 높이% = w × 비율 × 1.5 */
+function pctRect(p, name){ const h = p.w * (p.ar || AR[name]) * 1.5; return { l:p.x - p.w/2, t:p.b - h, w:p.w, h }; }
+function put(el, r){ el.style.left = r.l + '%'; el.style.top = r.t + '%'; el.style.width = r.w + '%'; el.style.height = r.h + '%'; }
+function pad(r, d){ return { l:r.l - d, t:r.t - d*1.5, w:r.w + d*2, h:r.h + d*3 }; }
+function inR(r, p){ return p.x >= r.l && p.x <= r.l + r.w && p.y >= r.t && p.y <= r.t + r.h; }
+function toPct(stage, x, y){ const s = stage.getBoundingClientRect(); return { x:(x - s.left)/s.width*100, y:(y - s.top)/s.height*100 }; }
+function domPct(stage, el){ const s = stage.getBoundingClientRect(), r = el.getBoundingClientRect(); return { l:(r.left - s.left)/s.width*100, t:(r.top - s.top)/s.height*100, w:r.width/s.width*100, h:r.height/s.height*100 }; }
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const timers = { s1:[], s2:[] };
+const later = (g, fn, ms) => timers[g].push(setTimeout(fn, ms));
+/* 누르기: 손가락으로 끌어 놓은 직후의 첫 탭은 click이 빠질 때가 있어, 터치는 손을 뗄 때도 한 번만 실행한다 */
+function onTap(el, fn){
+  let last = 0;
+  el.addEventListener('pointerup', e => {
+    if(e.pointerType === 'mouse' || el.disabled) return;
+    const r = el.getBoundingClientRect();
+    if(e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom) return;
+    last = performance.now(); fn(e);
+  });
+  el.addEventListener('click', e => { if(el.disabled || performance.now() - last < 700) return; fn(e); });
+}
+
+/* ───────── 단계 탭 ───────── */
+let tab = 's1';
+function unlocked(id){ return id === 's1' || (id === 's2' && S1.waited) || (id === 's3' && step2() === 5); }
+function showTab(id){
+  if(!unlocked(id)){ toast(id === 's2' ? '1단계 실험 설치를 먼저 마치세요.' : '2단계 실험 과정을 먼저 마치세요.'); return; }
+  tab = id;
+  $$('.tab').forEach(t => t.setAttribute('aria-selected', String(t.dataset.tab === id)));
+  $$('.screen').forEach(s => s.classList.toggle('on', s.id === id));
+  window.scrollTo({ top:0 }); $$('.col').forEach(c => c.scrollTo({ top:0 }));
+  requestAnimationFrame(() => { layout1(); layout2(); });
+}
+function updateTabs(){
+  $('#tab-s2').classList.toggle('locked', !unlocked('s2'));
+  $('#tab-s3').classList.toggle('locked', !unlocked('s3'));
+}
+$$('.tab').forEach(t => onTap(t, () => showTab(t.dataset.tab)));
+
+/* ═════════ 1단계: 실험 설치 ═════════ */
+const st1 = $('#stage1');
+const L1 = {
+  pot:   [ { x:37, b:84, w:12 }, { x:61, b:84, w:12 } ],
+  box:   { w:16.5, db:1.2 },            /* 어둠상자: 모종 가운데, 모종 바닥보다 조금 아래까지 */
+  sun:   { x:19, y:26, d:12 },          /* 가운데(x·y %)와 지름(폭 %) */
+  clock: { x:80.5, y:5.5, w:14 }
+};
+const S1 = { pot:[false, false], box:-1, sun:false, waited:false, spinning:false };
+const STEP1_TEXT = [
+  '상추 모종 2개를 끌어서 점선 자리 두 곳에 놓으세요.',
+  '어둠상자를 끌어서 상추 모종 하나에 씌우세요.',
+  '햇빛을 끌어서 하늘의 점선 자리에 놓으세요.',
+  '버튼을 누르면 24시간이 지납니다. 오른쪽 위 시계를 보세요.',
+  '24시간이 지났습니다. 2단계로 이동하세요.'
+];
+function step1(){ if(!(S1.pot[0] && S1.pot[1])) return 0; if(S1.box < 0) return 1; if(!S1.sun) return 2; if(!S1.waited) return 3; return 4; }
+const potR = i => pctRect(L1.pot[i], 'lettuce');
+const boxR = i => { const p = L1.pot[i]; return pctRect({ x:p.x, b:p.b + L1.box.db, w:L1.box.w }, 'darkbox'); };
+const sunR = () => { const s = L1.sun; return { l:s.x - s.d/2, t:s.y - s.d*.75, w:s.d, h:s.d*1.5 }; };
+const Z1 = {
+  pot0: { part:'lettuce', r:() => pad(potR(0), .6), ok:() => step1() === 0 && !S1.pot[0] },
+  pot1: { part:'lettuce', r:() => pad(potR(1), .6), ok:() => step1() === 0 && !S1.pot[1] },
+  box0: { part:'box', r:() => boxR(0), ok:() => step1() === 1 },
+  box1: { part:'box', r:() => boxR(1), ok:() => step1() === 1 },
+  sun:  { part:'sun', r:() => sunR(), ok:() => step1() === 2 }
+};
+const PART1 = { lettuce:$('.part[data-part="lettuce"]'), box:$('.part[data-part="box"]'), sun:$('.part[data-part="sun"]') };
+const ZONE1 = {}; Object.keys(Z1).forEach(k => ZONE1[k] = $(`.zone[data-zone="${k}"]`));
+const partStep = { lettuce:0, box:1, sun:2 };
+
+/* 24시간 시계 눈금 */
+(function buildClock(){
+  let t = '', n = '';
+  for(let i = 0; i < 60; i++){
+    const a = i * 6 * Math.PI/180, big = i % 5 === 0, r1 = big ? 37.5 : 40, r2 = 43;
+    t += `<line x1="${50 + r1*Math.sin(a)}" y1="${50 - r1*Math.cos(a)}" x2="${50 + r2*Math.sin(a)}" y2="${50 - r2*Math.cos(a)}" stroke="#1B2A41" stroke-width="${big ? 1.8 : .7}" stroke-linecap="round"/>`;
+  }
+  for(let h = 1; h <= 12; h++){ const a = h * 30 * Math.PI/180; n += `<text x="${50 + 30.5*Math.sin(a)}" y="${50 - 30.5*Math.cos(a)}">${h}</text>`; }
+  $('#ticks').innerHTML = t; $('#nums').innerHTML = n;
+})();
+const CLOCK_START = 9;      /* 오전 9시에 시작 */
+function setClock(h){
+  const H = CLOCK_START + h;
+  $('#hHand').setAttribute('transform', `rotate(${H*30} 50 50)`);
+  $('#mHand').setAttribute('transform', `rotate(${H*360} 50 50)`);
+  $('#clockText').textContent = Math.floor(h + 1e-6) + '시간 지남';
+}
+
+function layout1(){
+  [0, 1].forEach(i => {
+    const o = $('#o1-pot' + i), r = potR(i), sh = $('#sh1-' + i);
+    put(o, r); o.classList.toggle('gone', !S1.pot[i]);
+    sh.style.left = (r.l + r.w/2) + '%'; sh.style.top = (L1.pot[i].b - .4) + '%';
+    sh.style.width = (S1.box === i ? L1.box.w * 1.05 : r.w * .9) + '%'; sh.style.height = '3%';
+    sh.classList.toggle('gone', !S1.pot[i]);
+    const t = $('#t1-' + i);
+    t.hidden = !S1.waited;
+    t.textContent = i === S1.box ? '햇빛을 받지 않은 모종' : '햇빛을 받은 모종';
+    t.style.left = (r.l + r.w/2) + '%'; t.style.top = (L1.pot[i].b + 3.6) + '%';
+  });
+  const bx = $('#o1-box');
+  if(S1.box >= 0) put(bx, boxR(S1.box));
+  bx.classList.toggle('gone', S1.box < 0);
+  const sn = $('#o1-sun'), sr = sunR();
+  put(sn, sr); sn.classList.toggle('gone', !S1.sun);
+  Object.entries(Z1).forEach(([k, z]) => { put(ZONE1[k], z.r()); ZONE1[k].classList.toggle('done', !z.ok()); });
+  const c = $('#clock1'); c.style.left = L1.clock.x + '%'; c.style.top = L1.clock.y + '%'; c.style.width = L1.clock.w + '%';
+  drawSun();
+}
+function drawSun(){
+  const s = L1.sun, S = [s.x * 1.5, s.y];
+  st1.style.setProperty('--sx', s.x + '%'); st1.style.setProperty('--sy', s.y + '%');
+  [0, 1].forEach(i => {
+    const r = S1.box === i ? boxR(i) : potR(i);
+    const P = [(r.l + r.w/2) * 1.5, r.t + r.h * .55];
+    const dx = P[0] - S[0], dy = P[1] - S[1], len = Math.hypot(dx, dy) || 1;
+    const nx = -dy/len, ny = dx/len, a = 1.4, b = r.w * 1.5 * .62;
+    const pts = [[S[0] + nx*a, S[1] + ny*a], [S[0] - nx*a, S[1] - ny*a], [P[0] - nx*b, P[1] - ny*b], [P[0] + nx*b, P[1] + ny*b]];
+    $('#beam1-' + i).setAttribute('points', pts.map(p => p.join(',')).join(' '));
+  });
+  const g = $('#beam1'); g.setAttribute('x1', S[0]); g.setAttribute('y1', S[1]); g.setAttribute('x2', 75); g.setAttribute('y2', 75);
+}
+
+function render1(){
+  const s = step1();
+  $$('#steps1 li').forEach((li, i) => li.className = i < s ? 'done' : i === s ? 'now' : '');
+  const st = $('#st1');
+  st.classList.toggle('ok', s === 4);
+  $('#st1No').textContent = s === 4 ? '완료' : String(s + 1);
+  $('#st1Tx').textContent = S1.spinning ? '24시간이 지나는 중입니다…' : STEP1_TEXT[s];
+  $('#waitBtn').hidden = s !== 3;
+  $('#waitBtn').disabled = S1.spinning;
+  const left = [0, 1].filter(i => !S1.pot[i]).length;
+  $('#potLeft').textContent = left ? `${left}개 남음 · 점선 자리에 놓기` : '2개 모두 놓음';
+  Object.entries(PART1).forEach(([k, p]) => {
+    const done = k === 'lettuce' ? !left : k === 'box' ? S1.box >= 0 : S1.sun;
+    p.classList.toggle('done', done);
+    p.classList.toggle('wait', !done && partStep[k] !== s);
+  });
+  $('#go2').disabled = !S1.waited;
+  st1.classList.toggle('sunny', S1.sun);
+  $('#clock1').classList.toggle('done', S1.waited);
+  layout1(); updateTabs();
+}
+
+/* 끌어서 놓기 · 눌러서 고르기 */
+let sel1 = null, drag1 = null, ghost = null;
+function select1(k){
+  sel1 = k;
+  Object.entries(PART1).forEach(([q, p]) => p.classList.toggle('sel', q === k));
+  Object.entries(Z1).forEach(([z, d]) => ZONE1[z].classList.toggle('want', !!k && d.part === k));
+}
+function canUse1(k){
+  const s = step1();
+  if(PART1[k].classList.contains('done')) return false;
+  if(partStep[k] !== s){ toast(s < 4 ? `지금은 «${$$('#steps1 li b')[s].textContent}» 차례입니다.` : '1단계 설치를 마쳤습니다.'); return false; }
+  return true;
+}
+function makeGhost(k){
+  const W = st1.clientWidth, H = st1.clientHeight;
+  if(k === 'sun'){
+    ghost = document.createElement('i'); ghost.className = 'ghost-drag sunth';
+    ghost.style.width = ghost.style.height = Math.max(56, L1.sun.d/100*W) + 'px';
+  }else{
+    ghost = document.createElement('img'); ghost.className = 'ghost-drag'; ghost.alt = '';
+    ghost.src = k === 'lettuce' ? 'assets/lettuce.webp' : 'assets/darkbox.webp';
+    const r = k === 'lettuce' ? potR(0) : boxR(0);
+    ghost.style.width = Math.max(56, r.w/100*W) + 'px'; ghost.style.height = Math.max(56*r.h/r.w/1.5, r.h/100*H) + 'px';
+  }
+  document.body.appendChild(ghost);
+}
+function moveGhost(x, y){ if(ghost) ghost.style.translate = `${x}px ${y}px`; }
+function dropGhost(){ if(ghost){ ghost.remove(); ghost = null; } Object.values(ZONE1).forEach(z => z.classList.remove('hot')); }
+function zoneAt1(x, y, part){
+  const p = toPct(st1, x, y);
+  let best = null, bestD = Infinity;
+  Object.entries(Z1).forEach(([k, z]) => {
+    if(!z.ok() || z.part !== part) return;
+    const r = pad(z.r(), 3);
+    if(inR(r, p)){ const d = Math.hypot(p.x - (r.l + r.w/2), (p.y - (r.t + r.h/2)) / 1.5); if(d < bestD){ bestD = d; best = k; } }
+  });
+  return best;
+}
+function place1(k, zone){
+  if(k === 'lettuce') S1.pot[+zone.slice(-1)] = true;
+  if(k === 'box') S1.box = +zone.slice(-1);
+  if(k === 'sun') S1.sun = true;
+  select1(null);
+  const el = k === 'lettuce' ? $('#o1-pot' + zone.slice(-1)) : k === 'box' ? $('#o1-box') : $('#o1-sun');
+  el.classList.remove('in'); void el.offsetWidth; el.classList.add('in');
+  render1();
+  if(k === 'sun') toast('두 상추 모종에 햇빛이 비칩니다.');
+}
+Object.entries(PART1).forEach(([k, p]) => {
+  p.addEventListener('pointerdown', e => {
+    if(drag1 || (e.pointerType === 'mouse' && e.button !== 0)) return;
+    drag1 = { k, id:e.pointerId, sx:e.clientX, sy:e.clientY, on:false };
+    try{ p.setPointerCapture(e.pointerId); }catch(_){}
+  });
+  p.addEventListener('pointermove', e => {
+    if(!drag1 || drag1.id !== e.pointerId) return;
+    if(!drag1.on && Math.hypot(e.clientX - drag1.sx, e.clientY - drag1.sy) > 6){
+      if(!canUse1(k)){ drag1 = null; return; }
+      drag1.on = true; select1(k); makeGhost(k);
+    }
+    if(drag1.on){
+      e.preventDefault(); moveGhost(e.clientX, e.clientY);
+      const z = zoneAt1(e.clientX, e.clientY, k);
+      Object.entries(ZONE1).forEach(([q, el]) => el.classList.toggle('hot', q === z));
+    }
+  });
+  p.addEventListener('pointerup', e => {
+    if(!drag1 || drag1.id !== e.pointerId) return;
+    const d = drag1; drag1 = null;
+    if(d.on){
+      dropGhost();
+      const z = zoneAt1(e.clientX, e.clientY, k);
+      if(z) place1(k, z);
+      else { select1(null); const s = st1.getBoundingClientRect(); if(e.clientX > s.left && e.clientX < s.right && e.clientY > s.top && e.clientY < s.bottom) toast('점선으로 표시된 자리에 놓으세요.'); }
+    }else if(canUse1(k)) select1(sel1 === k ? null : k);
+  });
+  p.addEventListener('pointercancel', () => { drag1 = null; dropGhost(); });
+  p.addEventListener('click', e => { if(e.detail === 0 && canUse1(k)) select1(sel1 === k ? null : k); });
+  p.addEventListener('contextmenu', e => e.preventDefault());
+});
+Object.entries(ZONE1).forEach(([k, el]) => onTap(el, () => {
+  if(!sel1){ toast('준비물 목록에서 놓을 것을 먼저 고르세요.'); return; }
+  if(Z1[k].part === sel1) place1(sel1, k);
+  else toast('그 자리가 아닙니다.');
+}));
+st1.addEventListener('contextmenu', e => e.preventDefault());
+
+function wait24(){
+  if(step1() !== 3 || S1.spinning) return;
+  S1.spinning = true;
+  $('#clock1').classList.add('spin');
+  render1();
+  const t0 = performance.now(), D = 4200;
+  (function f(now){
+    if(!S1.spinning) return;
+    const p = Math.min(1, (now - t0) / D), e = p < .5 ? 2*p*p : 1 - Math.pow(-2*p + 2, 2)/2;
+    setClock(24 * e);
+    if(p < 1){ requestAnimationFrame(f); return; }
+    S1.spinning = false; S1.waited = true;
+    $('#clock1').classList.remove('spin');
+    render1();
+    toast('24시간이 지났습니다. 2단계로 이동하세요.');
+  })(t0);
+}
+onTap($('#waitBtn'), wait24);
+onTap($('#go2'), () => showTab('s2'));
+
+/* ═════════ 2단계: 실험 과정 · 현미경 관찰 ═════════ */
+const st2 = $('#stage2');
+const L2 = {
+  ethanol:    { x:8,    b:88,   w:8.5 },
+  rack:       { x:24,   b:89.5, w:15 },
+  tubeW:      2.9,
+  tubeRack:   { A:21, B:27, b:86 },
+  leaf0:      { A:36.5, B:43,   b:92, w:5.4, ar:.6 },
+  hotplate:   { x:56,   b:92.5, w:18 },
+  beaker:     { x:56,   b:84,   w:13 },
+  tubeBeaker: { A:53.6, B:58.4, b:81 },
+  dish:       { A:71.5, B:84,   b:92, w:11.5 },
+  iodine:     { x:95.5, b:88,   w:5.2 },
+  bub:        { t:11, w:21 }
+};
+const O2 = {};
+['ethanol','rack','tubeA','tubeB','leafA','leafB','hotplate','beaker','dishA','dishB','iodine'].forEach(k => O2[k] = $('#o2-' + k));
+const S = { ethanol:false, pouring:false, tube:{ A:false, B:false }, beaker:{ A:false, B:false }, bleach:{ A:0, B:0 }, dish:{ A:false, B:false }, iod:{ A:false, B:false }, holding:false, dropping:false };
+const STEPS2 = [
+  { no:5, title:'시험관에 에탄올 넣기', text:'에탄올 병을 끌어서 시험관 A, B 위에 가져가면 에탄올이 들어갑니다.' },
+  { no:6, title:'시험관에 상추 잎 넣기', text:'상추 잎 A는 시험관 A에, 상추 잎 B는 시험관 B에 끌어다 넣으세요. 말풍선에서 현미경으로 본 잎 세포를 확인하세요.' },
+  { no:7, title:'뜨거운 물이 든 비커에 시험관 넣기', text:'시험관 A, B를 끌어서 뜨거운 물이 든 비커에 넣으세요.', busy:'잎의 엽록소가 에탄올에 녹아 나오고 있습니다. 말풍선 속 잎 세포를 보세요.' },
+  { no:8, title:'상추 잎을 페트리 접시로 옮기기', text:'시험관 속 상추 잎 A, B를 끌어서 같은 글자가 붙은 페트리 접시로 옮기세요.' },
+  { no:9, title:'아이오딘-아이오딘화 칼륨 용액 떨어뜨리기', text:'용액 병을 눌러 스포이드를 든 다음, 페트리 접시 위의 상추 잎 A와 B를 각각 누르세요.' }
+];
+function step2(){
+  if(!S.ethanol) return 0;
+  if(!(S.tube.A && S.tube.B)) return 1;
+  if(!(S.bleach.A === 2 && S.bleach.B === 2)) return 2;
+  if(!(S.dish.A && S.dish.B)) return 3;
+  if(!(S.iod.A && S.iod.B)) return 4;
+  return 5;
+}
+const other = K => K === 'A' ? 'B' : 'A';
+const tubeR = K => S.beaker[K] ? pctRect({ x:L2.tubeBeaker[K], b:L2.tubeBeaker.b, w:L2.tubeW }, 'tube') : pctRect({ x:L2.tubeRack[K], b:L2.tubeRack.b, w:L2.tubeW }, 'tube');
+const dishR = K => pctRect({ x:L2.dish[K], b:L2.dish.b, w:L2.dish.w }, 'petri');
+const beakerR = () => pctRect(L2.beaker, 'beaker');
+const bottleR = () => pctRect(L2.ethanol, 'ethanol');
+const iodineR = () => pctRect(L2.iodine, 'iodine');
+function tubesR(){ const a = tubeR('A'), b = tubeR('B'); return { l:a.l, t:a.t, w:b.l + b.w - a.l, h:a.h }; }
+function leafR(K){
+  if(S.dish[K]){ const d = dishR(K), w = d.w * .6, h = w * .48 * 1.5; return { l:d.l + d.w/2 - w/2, t:d.t + d.h * .48 - h/2, w, h }; }
+  if(S.tube[K]){ const t = tubeR(K), w = t.w * .62, h = t.h * .2; return { l:t.l + t.w/2 - w/2, t:t.t + t.h * .44, w, h }; }
+  return pctRect({ x:L2.leaf0[K], b:L2.leaf0.b, w:L2.leaf0.w, ar:L2.leaf0.ar }, 'leaf');
+}
+
+/* 접촉 그림자 */
+const SHADE2 = { ethanol:() => bottleR(), rack:() => pctRect(L2.rack, 'rack'), hotplate:() => pctRect(L2.hotplate, 'hotplate'), dishA:() => dishR('A'), dishB:() => dishR('B'), iodine:() => iodineR() };
+Object.keys(SHADE2).forEach(k => { const s = document.createElement('span'); s.className = 'shade'; s.id = 'sh2-' + k; $('#shades2').appendChild(s); });
+
+function layout2(){
+  if(!S.pouring) put(O2.ethanol, bottleR());
+  put(O2.rack, pctRect(L2.rack, 'rack'));
+  put(O2.hotplate, pctRect(L2.hotplate, 'hotplate'));
+  put(O2.beaker, beakerR());
+  put(O2.iodine, iodineR());
+  ['A','B'].forEach(K => {
+    put(O2['tube' + K], tubeR(K));
+    put(O2['leaf' + K], leafR(K));
+    put(O2['dish' + K], dishR(K));
+    const lr = leafR(K), tg = $('#tg-leaf' + K);
+    tg.hidden = S.tube[K]; tg.style.left = (lr.l + lr.w/2) + '%'; tg.style.top = (lr.t + lr.h + 2.4) + '%';
+    const dr = dishR(K), td = $('#tg-dish' + K);
+    td.style.left = (dr.l + dr.w/2) + '%'; td.style.top = (dr.t + dr.h + 2.6) + '%';
+  });
+  Object.entries(SHADE2).forEach(([k, f]) => {
+    const r = f(), s = $('#sh2-' + k);
+    if(k === 'ethanol' && S.pouring){ s.classList.add('gone'); return; }
+    s.classList.remove('gone');
+    s.style.left = (r.l + r.w/2) + '%'; s.style.top = (r.t + r.h - .5) + '%'; s.style.width = (r.w * .95) + '%'; s.style.height = '2.6%';
+  });
+  const br = beakerR(), sm = $('#steam');
+  sm.style.left = (br.l + br.w * .2) + '%'; sm.style.width = (br.w * .6) + '%';
+  sm.style.top = (br.t - 12) + '%'; sm.style.height = '14%';
+  const tb = $('#tg-beaker'); tb.style.left = (br.l + br.w/2) + '%'; tb.style.top = (pctRect(L2.hotplate, 'hotplate').t + pctRect(L2.hotplate, 'hotplate').h + 3) + '%';
+  const ir = iodineR(), ti = $('#tg-iodine');
+  const narrow = st2.classList.contains('narrow');
+  ti.style.left = 'auto'; ti.style.right = '.8%';
+  ti.style.transform = narrow ? 'translateY(-100%)' : 'none';
+  ti.style.top = (narrow ? ir.t - 1 : ir.t + ir.h + 1.2) + '%';
+  const bl = layoutBubbles();
+  /* 좁은 실험대에서 오른쪽 말풍선이 용액 이름표를 덮으면 이름표를 숨긴다(과정 카드에 이름이 있다) */
+  ti.hidden = narrow && bl.pos.B != null && bl.pos.B + bl.W/2 > 70;
+  renderTargets2();
+}
+
+/* 말풍선: 잎이 있는 곳(시험관 → 페트리 접시)을 가리킨다 */
+function anchorR(K){ return S.dish[K] ? leafR(K) : tubeR(K); }
+function layoutBubbles(){
+  const narrow = st2.classList.contains('narrow');
+  const W = narrow ? 25 : L2.bub.w, top = narrow ? 15.5 : L2.bub.t, pos = {};
+  const vis = ['A','B'].filter(K => S.tube[K]);
+  vis.forEach(K => { const r = anchorR(K); pos[K] = clamp(r.l + r.w/2, W/2 + 1, 99 - W/2); });
+  if(vis.length === 2){
+    const need = W + 1.5;
+    if(pos.B - pos.A < need){
+      const m = (pos.A + pos.B) / 2;
+      pos.A = m - need/2; pos.B = m + need/2;
+      if(pos.A < W/2 + 1){ pos.A = W/2 + 1; pos.B = pos.A + need; }
+      if(pos.B > 99 - W/2){ pos.B = 99 - W/2; pos.A = pos.B - need; }
+    }
+  }
+  ['A','B'].forEach(K => {
+    const b = $('#bub-' + K);
+    b.classList.toggle('show', vis.includes(K));
+    if(pos[K] != null){ b.style.left = (pos[K] - W/2) + '%'; b.style.top = top + '%'; b.style.width = W + '%'; }
+  });
+  return { pos, W };
+}
+function drawTails(){
+  ['A','B'].forEach(K => {
+    const poly = $('#tail' + K), b = $('#bub-' + K);
+    if(!S.tube[K] || tab !== 's2'){ poly.setAttribute('points', ''); return; }
+    const br = domPct(st2, b), el = S.dish[K] ? O2['leaf' + K] : O2['tube' + K], or = domPct(st2, el);
+    const bx = br.l + br.w/2, by = br.t + br.h - .8;
+    const tx = or.l + or.w/2, ty = S.dish[K] ? or.t + or.h*.2 : or.t + or.h * .36;
+    const hw = Math.min(2.2, br.w * .12);
+    poly.setAttribute('points', [[(bx - hw)*1.5, by], [(bx + hw)*1.5, by], [tx*1.5, ty]].map(p => p.join(',')).join(' '));
+  });
+  requestAnimationFrame(drawTails);
+}
+requestAnimationFrame(drawTails);
+function setBubble(K, state, caption, ms){
+  const b = $('#bub-' + K);
+  b.querySelectorAll('.scope img').forEach(i => { if(ms) i.style.transitionDuration = ms + 'ms'; i.classList.toggle('on', i.dataset.s === state); });
+  b.querySelector('.bc').textContent = caption;
+}
+
+/* 목표 자리 점선 */
+function renderTargets2(){
+  const s = step2(), box = $('#tz2'), list = [];
+  const add = (r, label, up) => list.push({ r, label, up });
+  if(!S.pouring){
+    if(s === 0) add(pad(tubesR(), .8), '시험관 A, B');
+    if(s === 1) ['A','B'].forEach(K => { if(!S.tube[K]) add(pad(tubeR(K), .5), '시험관 ' + K); });
+    if(s === 2 && !(S.beaker.A && S.beaker.B)) add(pad(beakerR(), .6), st2.classList.contains('narrow') ? '' : '뜨거운 물이 든 비커', true);
+    if(s === 3) ['A','B'].forEach(K => { if(!S.dish[K]) add(pad(dishR(K), .4), '페트리 접시 ' + K, true); });
+  }
+  box.innerHTML = list.map(z => `<i class="tzone${z.up ? ' up' : ''}" style="left:${z.r.l}%;top:${z.r.t}%;width:${z.r.w}%;height:${z.r.h}%">${z.label ? '<span>' + z.label + '</span>' : ''}</i>`).join('');
+  ['A','B'].forEach(K => {
+    const ring = $('#ring' + K), on = s === 4 && !S.iod[K];
+    ring.hidden = !on;
+    if(on){ const r = leafR(K), d = Math.max(r.w, r.h / 1.5) * 1.5; ring.style.left = (r.l + r.w/2 - d/2) + '%'; ring.style.top = (r.t + r.h/2 - d*.75) + '%'; ring.style.width = d + '%'; ring.style.height = (d * 1.5) + '%'; }
+  });
+}
+
+function render2(){
+  const s = step2(), heating = S.bleach.A === 1 || S.bleach.B === 1;
+  const st = STEPS2[Math.min(s, 4)];
+  $('#s2No').textContent = s < 5 ? `실험 과정 ${st.no}` : '실험 과정 완료';
+  $('#s2Title').textContent = s < 5 ? st.title : '실험을 마쳤습니다';
+  $('#s2Text').textContent = s < 5 ? (s === 2 && heating ? st.busy : st.text) : '말풍선 속 현미경 관찰 화면을 비교해 보고, 다음 화면에서 탐구 결과를 정리하세요.';
+  $('#safety').hidden = s !== 2;
+  $('#s2Bar').style.width = (s / 5 * 100) + '%';
+  $$('#steps2 li').forEach((li, i) => li.className = i < s ? 'done' : i === s ? 'now' : '');
+  ['ethanol','leafA','leafB','tubeA','tubeB'].forEach(k => { const a = !!spec(k); O2[k].classList.toggle('active', a); O2[k].tabIndex = a ? 0 : -1; });
+  O2.iodine.classList.toggle('active', s === 4);
+  O2.iodine.tabIndex = s === 4 ? 0 : -1;
+  $('#steam').classList.toggle('hot', heating);
+  $('#go3').disabled = s !== 5;
+  layout2(); updateTabs();
+}
+
+/* 무엇을 어디로 옮기는가 */
+function spec(k){
+  const s = step2();
+  if(S.pouring || S.dropping) return null;
+  if(s === 0 && k === 'ethanol') return { to:tubesR(), done:pourEthanol, miss:'에탄올 병을 시험관 A, B 위로 가져가세요.' };
+  const K = k.slice(-1);
+  if(s === 1 && k.startsWith('leaf') && !S.tube[K]) return { to:tubeR(K), wrong:S.tube[other(K)] ? null : tubeR(other(K)), wrongMsg:`상추 잎 ${K}는 시험관 ${K}에 넣으세요.`, miss:`상추 잎 ${K}를 시험관 ${K}에 넣으세요.`, done:() => insertLeaf(K) };
+  if(s === 2 && k.startsWith('tube') && !S.beaker[K]) return { to:beakerR(), done:() => heatTube(K), miss:'뜨거운 물이 든 비커에 넣으세요.' };
+  if(s === 3 && k.startsWith('leaf') && !S.dish[K]) return { to:dishR(K), wrong:S.dish[other(K)] ? null : dishR(other(K)), wrongMsg:`상추 잎 ${K}는 페트리 접시 ${K}로 옮기세요.`, miss:`페트리 접시 ${K}로 옮기세요.`, done:() => toDish(K) };
+  return null;
+}
+function turnMsg2(){ const s = step2(); return s < 5 ? `지금은 «${STEPS2[s].title}» 차례입니다.` : '실험을 마쳤습니다. 다음 화면으로 이동하세요.'; }
+
+let drag2 = null;
+function keyOf2(el){ return Object.keys(O2).find(k => O2[k] === el); }
+/* 좁은 화면에서는 넓혀 둔 누름 영역끼리 겹친다(잎 A·B, 시험관 A·B) → 손가락에서 실제 그림이 가장 가까운 물건을 잡는다 */
+function nearestActive(x, y){
+  let best = null, bd = Infinity;
+  ['ethanol','leafA','leafB','tubeA','tubeB'].forEach(k => {
+    if(!O2[k].classList.contains('active')) return;
+    const r = O2[k].getBoundingClientRect();
+    const d = Math.hypot(Math.max(r.left - x, 0, x - r.right), Math.max(r.top - y, 0, y - r.bottom));
+    if(d < bd){ bd = d; best = k; }
+  });
+  return bd <= 32 ? best : null;
+}
+function onDown2(e){
+  const k = nearestActive(e.clientX, e.clientY) || keyOf2(e.currentTarget);
+  if(drag2 || step2() === 4) return;
+  const sp = spec(k);
+  if(!sp){ if(!S.pouring && !S.dropping) toast(turnMsg2()); return; }
+  e.preventDefault(); e.stopPropagation();
+  const el = O2[k], K = k.slice(-1);
+  const follow = k.startsWith('tube') && S.tube[K] ? O2['leaf' + K] : null;
+  [el, follow].forEach(x => { if(x){ x.classList.remove('anim'); x.classList.add('dragging'); } });
+  el.setPointerCapture(e.pointerId);
+  drag2 = { k, el, follow, id:e.pointerId, sx:e.clientX, sy:e.clientY, moved:0, sp };
+}
+function onMove2(e){
+  if(!drag2 || e.pointerId !== drag2.id) return;
+  const dx = e.clientX - drag2.sx, dy = e.clientY - drag2.sy;
+  drag2.moved = Math.max(drag2.moved, Math.hypot(dx, dy));
+  [drag2.el, drag2.follow].forEach(x => { if(x){ x.style.setProperty('--dx', dx + 'px'); x.style.setProperty('--dy', dy + 'px'); } });
+}
+function onUp2(e){
+  if(!drag2 || e.pointerId !== drag2.id) return;
+  const { k, el, follow, moved, sp } = drag2; drag2 = null;
+  const r = el.getBoundingClientRect();
+  const p = toPct(st2, r.left + r.width/2, k.startsWith('tube') ? r.top + r.height * .8 : r.top + r.height/2);
+  [el, follow].forEach(x => { if(x){ x.classList.remove('dragging'); x.classList.add('anim'); x.style.removeProperty('--dx'); x.style.removeProperty('--dy'); } });
+  if(moved < 8 || inR(pad(sp.to, 2.5), p)){ sp.done(); return; }
+  if(sp.wrong && inR(pad(sp.wrong, 2), p)) toast(sp.wrongMsg); else toast(sp.miss);
+  layout2();
+}
+function onKey2(e){
+  if(e.key !== 'Enter' && e.key !== ' ') return;
+  const sp = spec(keyOf2(e.currentTarget));
+  if(sp){ e.preventDefault(); sp.done(); }
+}
+['ethanol','leafA','leafB','tubeA','tubeB'].forEach(k => {
+  O2[k].addEventListener('pointerdown', onDown2);
+  O2[k].addEventListener('pointermove', onMove2);
+  O2[k].addEventListener('pointerup', onUp2);
+  O2[k].addEventListener('pointercancel', onUp2);
+  O2[k].addEventListener('keydown', onKey2);
+});
+st2.addEventListener('contextmenu', e => e.preventDefault());
+
+function pourEthanol(){
+  S.pouring = true; render2();
+  const el = O2.ethanol, T = tubesR(), r = bottleR();
+  const cx = T.l + T.w/2 + (r.h / 1.5) * .48 * .97, cy = T.t - 4 - r.h * .5 * .26;
+  el.classList.add('anim');
+  put(el, { l:cx - r.w/2, t:cy - r.h/2, w:r.w, h:r.h });
+  el.style.setProperty('--rot', '-105deg');
+  later('s2', () => ['A','B'].forEach(K => O2['tube' + K].classList.add('filled')), 700);
+  later('s2', () => {
+    el.style.setProperty('--rot', '0deg');
+    S.pouring = false; S.ethanol = true;
+    render2();
+    toast('시험관 A, B에 에탄올을 넣었습니다.');
+  }, 2000);
+}
+function insertLeaf(K){
+  S.tube[K] = true;
+  O2['leaf' + K].classList.add('anim');
+  setBubble(K, 'fresh', '탈색 전 잎 세포');
+  render2();
+}
+function heatTube(K){
+  S.beaker[K] = true; S.bleach[K] = 1;
+  O2['tube' + K].classList.add('anim'); O2['leaf' + K].classList.add('anim');
+  render2();
+  later('s2', () => {
+    O2['tube' + K].classList.add('green'); O2['leaf' + K].classList.add('bleach');
+    setBubble(K, 'bleached', '탈색되는 중…', 3200);
+  }, 650);
+  later('s2', () => {
+    S.bleach[K] = 2;
+    setBubble(K, 'bleached', '탈색 후 잎 세포');
+    render2();
+    if(step2() === 3) toast('두 잎이 모두 탈색되었습니다.');
+  }, 4100);
+}
+function toDish(K){
+  S.dish[K] = true;
+  O2['leaf' + K].classList.add('anim');
+  render2();
+}
+
+/* 스포이드: 병을 눌러 들고 → 잎을 누르면 한 방울 */
+const pip = $('#pipette');
+function pipTo(x, y, follow){ pip.classList.toggle('follow', !!follow); pip.style.left = x + '%'; pip.style.top = y + '%'; }
+function pickPipette(){
+  const r = iodineR();
+  S.holding = true; pip.classList.add('show');
+  pipTo(r.l + r.w/2, r.t - 1);
+  toast('스포이드에 용액을 넣었습니다. 상추 잎을 누르세요.');
+}
+function dishAt(p){ return ['A','B'].find(K => inR(pad(dishR(K), 1.2), p) || inR(pad(leafR(K), 2), p)); }
+function dropOn(K){
+  if(S.iod[K]){ toast(`상추 잎 ${K}에는 이미 떨어뜨렸습니다.`); return; }
+  S.dropping = true;
+  const lr = leafR(K), x = lr.l + lr.w/2, tipY = lr.t - 5;
+  pipTo(x, tipY);
+  later('s2', () => {
+    const d = $('#drop');
+    d.style.left = x + '%';
+    d.animate([{ top:tipY + '%', opacity:1 }, { top:(lr.t + lr.h * .45) + '%', opacity:1, offset:.85 }, { top:(lr.t + lr.h * .5) + '%', opacity:0 }], { duration:520, easing:'ease-in' });
+  }, 480);
+  later('s2', () => {
+    O2['leaf' + K].classList.add('iod');
+    setBubble(K, 'after', '용액을 떨어뜨린 후', 1900);
+    S.iod[K] = true; S.dropping = false;
+    if(S.iod.A && S.iod.B){
+      later('s2', () => { S.holding = false; pip.classList.remove('show'); }, 700);
+      toast('두 잎에 모두 떨어뜨렸습니다. 말풍선 속 세포를 비교해 보세요.');
+    }
+    render2();
+  }, 1000);
+}
+let pdrag = null;
+st2.addEventListener('pointerdown', e => {
+  if(step2() !== 4 || S.dropping) return;
+  const p = toPct(st2, e.clientX, e.clientY);
+  if(inR(pad(iodineR(), 1.5), p)){
+    if(!S.holding) pickPipette();
+    pdrag = { id:e.pointerId, sx:e.clientX, sy:e.clientY, moved:false };
+    try{ st2.setPointerCapture(e.pointerId); }catch(_){}
+    return;
+  }
+  const K = dishAt(p);
+  if(!S.holding){ if(K) toast('먼저 용액 병을 눌러 스포이드를 드세요.'); return; }
+  if(K) dropOn(K);
+});
+st2.addEventListener('pointermove', e => {
+  if(step2() !== 4 || !S.holding || S.dropping) return;
+  const pressing = pdrag && pdrag.id === e.pointerId;
+  if(pressing && Math.hypot(e.clientX - pdrag.sx, e.clientY - pdrag.sy) > 8) pdrag.moved = true;
+  if(e.pointerType === 'mouse' || (pressing && pdrag.moved)){ const p = toPct(st2, e.clientX, e.clientY); pipTo(p.x, p.y, true); }
+});
+st2.addEventListener('pointerup', e => {
+  if(!pdrag || pdrag.id !== e.pointerId) return;
+  const moved = pdrag.moved; pdrag = null;
+  if(!moved || S.dropping) return;
+  const K = dishAt(toPct(st2, e.clientX, e.clientY + 4));
+  if(K) dropOn(K); else { const r = iodineR(); pipTo(r.l + r.w/2, r.t - 1); }
+});
+O2.iodine.addEventListener('keydown', e => {
+  if((e.key === 'Enter' || e.key === ' ') && step2() === 4){ e.preventDefault(); if(!S.holding) pickPipette(); else { const K = ['A','B'].find(q => !S.iod[q]); if(K) dropOn(K); } }
+});
+onTap($('#go3'), () => showTab('s3'));
+
+/* ═════════ 3단계: 탐구 결과 ═════════ */
+const ANSWER = { obsA:'blue', obsB:'none', starch1:'녹말', fact:'sun', glucose:'포도당', starch2:'녹말' };
+const right3 = {};
+const norm = v => v.replace(/[\s()]/g, '');
+function mark3(q, state){
+  const el = $(`[data-q="${q}"]`);
+  el.classList.toggle('right', state === 'right');
+  el.classList.toggle('wrong', state === 'wrong');
+  const was = Object.keys(ANSWER).every(k => right3[k]);
+  right3[q] = state === 'right';
+  const all = Object.keys(ANSWER).every(k => right3[k]);
+  $('#verdict3').hidden = !all;
+  if(all && !was) requestAnimationFrame(() => $('#verdict3').scrollIntoView({ block:'nearest', behavior:'smooth' }));
+}
+$$('.choices[data-q]').forEach(g => g.querySelectorAll('.choice').forEach(b => onTap(b, () => {
+  g.querySelectorAll('.choice').forEach(c => c.setAttribute('aria-pressed', String(c === b)));
+  mark3(g.dataset.q, b.dataset.v === ANSWER[g.dataset.q] ? 'right' : 'wrong');
+})));
+$$('.blank[data-q]').forEach(bl => {
+  const q = bl.dataset.q, inp = bl.querySelector('input');
+  const judge = final => {
+    const v = norm(inp.value);
+    bl.classList.toggle('filled', !!v);
+    if(v === ANSWER[q]) mark3(q, 'right');
+    else mark3(q, final && v ? 'wrong' : '');
+  };
+  inp.addEventListener('input', () => judge(false));
+  inp.addEventListener('change', () => judge(true));
+  inp.addEventListener('keydown', e => { if(e.key === 'Enter'){ judge(true); inp.blur(); } });
+});
+function reset3(){
+  Object.keys(right3).forEach(q => delete right3[q]);
+  $$('[data-q]').forEach(el => el.classList.remove('right', 'wrong', 'filled'));
+  $$('#s3 .choice').forEach(c => c.setAttribute('aria-pressed', 'false'));
+  $$('#s3 input').forEach(i => i.value = '');
+  $('#verdict3').hidden = true;
+}
+onTap($('#reset3'), reset3);
+
+/* ───────── 다시 하기 ───────── */
+function reset2(){
+  timers.s2.forEach(clearTimeout); timers.s2 = [];
+  Object.assign(S, { ethanol:false, pouring:false, tube:{ A:false, B:false }, beaker:{ A:false, B:false }, bleach:{ A:0, B:0 }, dish:{ A:false, B:false }, iod:{ A:false, B:false }, holding:false, dropping:false });
+  pdrag = null; pip.classList.remove('show');
+  O2.ethanol.style.setProperty('--rot', '0deg');
+  ['A','B'].forEach(K => {
+    O2['tube' + K].classList.remove('filled', 'green', 'anim');
+    O2['leaf' + K].classList.remove('bleach', 'iod', 'anim');
+    const b = $('#bub-' + K);
+    b.querySelectorAll('.scope img').forEach(i => { i.style.transitionDuration = '0ms'; i.classList.toggle('on', i.dataset.s === 'fresh'); });
+    b.querySelector('.bc').textContent = '탈색 전 잎 세포';
+  });
+  Object.values(O2).forEach(o => o.classList.remove('anim'));
+  reset3();
+  render2();
+  if(tab === 's3') showTab('s2');
+}
+function resetAll(){
+  timers.s1.forEach(clearTimeout); timers.s1 = [];
+  Object.assign(S1, { pot:[false, false], box:-1, sun:false, waited:false, spinning:false });
+  $('#clock1').classList.remove('spin', 'done');
+  setClock(0); select1(null);
+  reset2(); render1(); showTab('s1');
+}
+onTap($('#reset2'), reset2);
+onTap($('#resetAll'), resetAll);
+
+/* 실험대 크기 → 글자·그림 단위, 그림 비율 읽기 */
+[st1, st2].forEach(stg => new ResizeObserver(() => {
+  if(!stg.clientWidth) return;
+  stg.style.setProperty('--u', stg.clientWidth / 100 + 'px');
+  stg.classList.toggle('narrow', stg.clientWidth < 560);
+  if(stg === st1) drawSun(); else layout2();
+}).observe(stg));
+const IMGS = { lettuce:'#o1-pot0 img', darkbox:'#o1-box img', ethanol:'#o2-ethanol img', tube:'#o2-tubeA img', rack:'#o2-rack img', beaker:'#o2-beaker img', hotplate:'#o2-hotplate img', petri:'#o2-dishA img', iodine:'#o2-iodine img', leaf:'#o2-leafA .l-fresh' };
+Promise.all(Object.entries(IMGS).map(([k, s]) => {
+  const im = $(s), read = () => { if(im.naturalWidth) AR[k] = im.naturalHeight / im.naturalWidth; };
+  return im.complete ? read() : new Promise(r => { im.addEventListener('load', () => { read(); r(); }); im.addEventListener('error', r); });
+})).then(() => { layout1(); layout2(); });
+setClock(0); render1(); render2();
+</script>
+</body>
+</html>
