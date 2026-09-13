@@ -14,6 +14,11 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <script>
+/* 진단용: 주소에 simple=1이 붙으면 실험대의 겹치기(mix-blend)·흐림(filter) 효과를 끈다 — 태블릿 그래픽 문제 확인용 */
+if(/[?&]simple=1/.test(location.search)){
+  document.documentElement.className += ' simple';
+  document.write('<style>.simple .stage{isolation:auto!important}.simple .stage *{mix-blend-mode:normal!important;filter:none!important}</style>');
+}
 /* ───────── 오류를 화면에 글자로 (ES5) ─────────
    옛 태블릿에서 화면이 안 뜨면 원인을 알 수 있게, 스크립트 오류와 브라우저 정보를 아래쪽 빨간 상자에 보여 준다.
    그림 불러오기 실패는 사본으로 바꿔 끼우므로 오류로 치지 않는다 */

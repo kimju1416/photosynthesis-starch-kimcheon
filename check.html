@@ -7,23 +7,31 @@
 <style>
 body{font:16px/1.6 -apple-system,'Apple SD Gothic Neo','Malgun Gothic',sans-serif;margin:0;padding:16px;background:#F6F8FB;color:#1B2A41}
 h1{font-size:20px;margin:0 0 4px}
+h2{font-size:17px;margin:18px 0 6px}
 p{margin:0 0 12px;color:#64748B}
 table{border-collapse:collapse;width:100%;background:#fff;border:1px solid #E3E9F2}
 td{border-top:1px solid #E3E9F2;padding:8px 10px;vertical-align:top;word-break:break-all}
-td.k{width:36%;font-weight:600}
+td.k{width:34%;font-weight:600}
 .ok{color:#1D7A4D;font-weight:700}
 .no{color:#C0392B;font-weight:700}
 img.t{height:40px;vertical-align:middle;margin-left:6px}
-iframe{display:block;width:100%;height:460px;border:1px solid #E3E9F2;background:#fff;margin-top:12px}
+iframe{display:block;width:100%;height:420px;border:2px solid #CBD5E1;background:#fff}
+.lab{font-weight:700;margin:14px 0 4px}
 </style>
 </head>
 <body>
-<h1>태블릿 점검</h1>
-<p>6초쯤 기다렸다가 이 화면을 캡처해서 보내 주세요. 아래 실험 화면까지 한 장에 안 들어가면 두 장으로 나눠도 됩니다.</p>
+<h1>태블릿 점검 (2판)</h1>
+<p>10초쯤 기다렸다가 <b>맨 아래까지</b> 캡처해서 보내 주세요. 한 장에 안 들어가면 두세 장으로 나눠도 됩니다.</p>
 <table id="t"></table>
-<iframe id="app" src="./?check=1"></iframe>
+
+<h2>실험 화면 미리보기</h2>
+<div class="lab">① 보통 화면</div>
+<iframe id="app1" src="./?check=1"></iframe>
+<div class="lab">② 겹치기·흐림 효과를 끈 화면</div>
+<iframe id="app2" src="./?check=1&simple=1"></iframe>
+
 <script>
-/* ES5만 쓴다 — 아주 옛 브라우저에서도 이 점검은 돌아야 한다 */
+/* ES5만 쓴다 — 어떤 브라우저에서도 이 점검은 돌아야 한다 */
 (function(){
   var t = document.getElementById('t');
   function row(k, v, ok){
@@ -37,15 +45,11 @@ iframe{display:block;width:100%;height:460px;border:1px solid #E3E9F2;background
   function js(code){ try { new Function(code); return true; } catch(e){ return false; } }
   row('브라우저 정보', navigator.userAgent);
   row('화면 크기', window.innerWidth + ' × ' + window.innerHeight + ' · 배율 ' + (window.devicePixelRatio || 1));
-  row('CSS 변수', '', css('--a', '0'));
-  row('CSS Grid', '', css('display', 'grid'));
-  row('aspect-ratio', '', css('aspect-ratio', '1 / 1'));
-  row('inset', '', css('inset', '0'));
-  row('clamp()', '', css('width', 'clamp(1px, 2px, 3px)'));
+  row('aspect-ratio · inset · clamp', '', css('aspect-ratio', '1 / 1') && css('inset', '0') && css('width', 'clamp(1px, 2px, 3px)'));
   row('dvh', '', css('height', '1dvh'));
-  row('ES6 문법(화살표 함수 등)', '', js('const a = (x) => `${x}`; let [b] = [...[1]]; class C {}'));
-  row('ResizeObserver', '', !!window.ResizeObserver);
-  row('PointerEvent(끌기)', '', !!window.PointerEvent);
+  row('ES6 · ResizeObserver · 끌기', '', js('const a = (x) => `${x}`; let [b] = [...[1]]; class C {}') && !!window.ResizeObserver && !!window.PointerEvent);
+  row('mix-blend-mode · filter', '', css('mix-blend-mode', 'multiply') && css('filter', 'blur(2px)'));
+
   function img(label, src){
     var c = row(label, '확인 중…'), im = new Image();
     im.onload = function(){ c.textContent = ''; var s = document.createElement('span'); s.className = 'ok'; s.textContent = '됨 ' + im.naturalWidth + '×' + im.naturalHeight; c.appendChild(s); im.className = 't'; c.appendChild(im); };
@@ -54,24 +58,47 @@ iframe{display:block;width:100%;height:460px;border:1px solid #E3E9F2;background
   }
   img('WebP 그림', 'assets/bg-lab.webp');
   img('JPG 그림', 'assets/bg-lab.jpg');
-  var appRow = row('실험 화면(아래)', '6초 뒤에 확인합니다…');
+
+  /* 광고 차단 기능: 광고처럼 보이는 이름의 상자를 숨기는지 본다 */
+  var bait = document.createElement('div');
+  bait.className = 'adsbox ad-banner advertisement banner_ad';
+  bait.style.cssText = 'position:absolute;left:-9999px;top:0;width:20px;height:20px';
+  bait.innerHTML = '&nbsp;';
+  document.body.appendChild(bait);
+  var adRow = row('광고 차단 기능', '확인 중…');
   setTimeout(function(){
-    try {
-      var w = document.getElementById('app').contentWindow, d = w.document;
-      var st = d.getElementById('stage') || d.getElementById('stage1');
-      var parts = [];
-      if(st){
-        var r = st.getBoundingClientRect(), imgs = st.getElementsByTagName('img'), shown = 0, names = [];
-        for(var i = 0; i < imgs.length; i++){ if(imgs[i].naturalWidth > 0) shown++; names.push((imgs[i].currentSrc || imgs[i].src).split('/').pop().split('?')[0]); }
-        parts.push('실험대 ' + Math.round(r.width) + '×' + Math.round(r.height));
-        parts.push('그림 ' + shown + '/' + imgs.length + ' 표시');
-        parts.push('파일 ' + names.slice(0, 2).join(', '));
-      } else parts.push('실험대를 찾지 못함');
-      parts.push('대비 코드 ' + (typeof w.useFallbackImages === 'function' ? '있음' : '없음(예전 화면)'));
-      parts.push('오류 ' + ((w.__appErrors && w.__appErrors.length) ? w.__appErrors.join(' | ') : '없음'));
-      appRow.textContent = parts.join(' · ');
-    } catch(e){ appRow.textContent = '확인 실패: ' + e.message; }
-  }, 6000);
+    var cs = window.getComputedStyle(bait);
+    var hidden = !bait.parentNode || cs.display === 'none' || cs.visibility === 'hidden' || bait.offsetHeight === 0;
+    adRow.textContent = '';
+    var s = document.createElement('span'); s.className = hidden ? 'no' : 'ok';
+    s.textContent = hidden ? '켜져 있음 — 화면 일부를 숨길 수 있습니다' : '감지 안 됨';
+    adRow.appendChild(s);
+  }, 1500);
+
+  function probe(frameId, label){
+    var c = row(label, '8초 뒤에 확인합니다…');
+    setTimeout(function(){
+      try {
+        var w = document.getElementById(frameId).contentWindow, d = w.document;
+        var st = d.getElementById('stage') || d.getElementById('stage1');
+        var parts = [];
+        if(st){
+          var r = st.getBoundingClientRect(), cs = w.getComputedStyle(st);
+          var imgs = st.getElementsByTagName('img'), shown = 0;
+          for(var i = 0; i < imgs.length; i++){ if(imgs[i].naturalWidth > 0) shown++; }
+          var bg = st.querySelector('img.bg'), bcs = bg ? w.getComputedStyle(bg) : null, br = bg ? bg.getBoundingClientRect() : null;
+          parts.push('실험대 ' + Math.round(r.width) + '×' + Math.round(r.height) + ' (' + cs.display + '/' + cs.visibility + '/투명도 ' + cs.opacity + ')');
+          parts.push('배경 그림 ' + (bg ? Math.round(br.width) + '×' + Math.round(br.height) + ' (' + bcs.display + '/' + bcs.visibility + '/' + (bg.naturalWidth > 0 ? '받음' : '못 받음') + ')' : '없음'));
+          parts.push('그림 ' + shown + '/' + imgs.length);
+        } else parts.push('실험대를 찾지 못함');
+        parts.push('겹치기 끔 ' + ((' ' + d.documentElement.className + ' ').indexOf(' simple ') >= 0 ? '예' : '아니오'));
+        parts.push('오류 ' + ((w.__appErrors && w.__appErrors.length) ? w.__appErrors.join(' | ') : '없음'));
+        c.textContent = parts.join(' · ');
+      } catch(e){ c.textContent = '확인 실패: ' + e.message; }
+    }, 8000);
+  }
+  probe('app1', '① 보통 화면');
+  probe('app2', '② 겹치기 끈 화면');
 })();
 </script>
 </body>
