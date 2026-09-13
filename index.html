@@ -125,11 +125,13 @@ button,input{font:inherit;color:inherit;touch-action:manipulation}
 .screen.on{display:grid}
 .col{display:flex;flex-direction:column;gap:12px;min-width:0}
 #s1{grid-template-columns:220px minmax(0,1fr) 292px}
-#s2{grid-template-columns:minmax(0,1.62fr) minmax(290px,1fr);height:520px;height:max(520px, calc(100vh - var(--bar)));height:max(520px, calc(100dvh - var(--bar)));padding-bottom:0}
-#s3{grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);height:520px;height:max(520px, calc(100vh - var(--bar)));height:max(520px, calc(100dvh - var(--bar)));padding-bottom:0}
+#s2{grid-template-columns:minmax(0,1.62fr) minmax(290px,1fr);height:calc(100vh - var(--bar));min-height:520px;padding-bottom:0}
+#s3{grid-template-columns:minmax(0,.86fr) minmax(0,1.14fr);height:calc(100vh - var(--bar));min-height:520px;padding-bottom:0}
 #s2 .col,#s3 .col{height:100%;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding-bottom:16px}
 .stage-title{margin:0;font-size:18px;font-weight:700;line-height:1.4}
-.stage-wrap{width:100%;width:min(100%, max(320px, calc((100vh - var(--bar) - 32px - var(--below)) * 1.5)));width:min(100%, max(320px, calc((100dvh - var(--bar) - 32px - var(--below)) * 1.5)));margin:0 auto}
+.stage-wrap{width:100%;max-width:calc((100vh - var(--bar) - 32px - var(--below)) * 1.5);min-width:min(100%, 320px);margin:0 auto}
+/* dvh는 아는 브라우저에서만 — var()가 섞인 선언은 모르는 브라우저에서 계산 시점에 무효가 되어 앞줄 대비값도 못 쓰고 unset이 된다(갤럭시탭 크롬 108 미만에서 실험대 폭 0) */
+@supports (height:100dvh){.stage-wrap{max-width:calc((100dvh - var(--bar) - 32px - var(--below)) * 1.5)}#s2,#s3{height:calc(100dvh - var(--bar))}}
 #s1 .stage-wrap{--below:100px}
 #s2 .stage-wrap{--below:44px}
 
@@ -343,7 +345,7 @@ button,input{font:inherit;color:inherit;touch-action:manipulation}
 /* 폭이 좁은 화면(세로 태블릿 포함) */
 @media (max-width:1023px){
   #s1{grid-template-columns:1fr}
-  #s1 .stage-wrap{width:100%}
+  #s1 .stage-wrap{width:100%;max-width:none}
   .parts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr))}
   .pfoot{display:flex;align-items:center;gap:12px;margin-top:10px}
   .pfoot .hint{flex:1;margin:0}
@@ -354,7 +356,7 @@ button,input{font:inherit;color:inherit;touch-action:manipulation}
 @media (orientation:portrait) and (min-width:600px){
   #s2{grid-template-columns:1fr;height:auto;padding-bottom:16px}
   #s2 .col{height:auto;overflow:visible;padding-bottom:0}
-  #s2 .stage-wrap{width:100%}
+  #s2 .stage-wrap{width:100%;max-width:none}
   #s3{grid-template-columns:minmax(0,.8fr) minmax(0,1.2fr);gap:12px;padding-left:12px;padding-right:12px}
   .qline .fl{min-width:0;flex-basis:100%}
 }
@@ -371,7 +373,7 @@ button,input{font:inherit;color:inherit;touch-action:manipulation}
   .screen{padding:10px}
   #s2,#s3{grid-template-columns:1fr;height:auto;padding-bottom:10px}
   #s2 .col,#s3 .col{height:auto;overflow:visible;padding-bottom:0}
-  .stage-wrap{width:100%!important}
+  .stage-wrap{width:100%!important;max-width:none!important}
   .part{flex-direction:column;align-items:center;text-align:center;gap:4px;min-height:0;padding:8px 6px}
   .part .ck{position:absolute;margin:0;top:5px;right:5px;width:16px;height:16px}
   .part small{display:none}
