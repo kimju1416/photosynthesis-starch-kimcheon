@@ -13,6 +13,84 @@
 <meta property="og:url" content="https://kimju1416.github.io/photosynthesis-starch-kimcheon/">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<script>
+/* ───────── 오류를 화면에 글자로 (ES5) ─────────
+   옛 태블릿에서 화면이 안 뜨면 원인을 알 수 있게, 스크립트 오류와 브라우저 정보를 아래쪽 빨간 상자에 보여 준다.
+   그림 불러오기 실패는 사본으로 바꿔 끼우므로 오류로 치지 않는다 */
+(function(){
+  var errs = window.__appErrors = [];
+  function show(){
+    var b = document.getElementById('compat-error');
+    if(!b){
+      b = document.createElement('div'); b.id = 'compat-error';
+      b.style.cssText = 'position:fixed;left:8px;right:8px;bottom:8px;z-index:99999;background:#C0392B;color:#fff;font:14px/1.5 sans-serif;padding:10px 12px;border-radius:10px;white-space:pre-wrap;word-break:break-all';
+      document.body.appendChild(b);
+    }
+    b.textContent = '화면을 준비하는 중에 오류가 났습니다. 이 화면을 캡처해서 보내 주세요.\n' + errs.slice(0, 3).join('\n') + '\n' + navigator.userAgent;
+  }
+  window.addEventListener('error', function(e){
+    if(e && e.target && e.target.tagName) return;
+    errs.push((e.message || '알 수 없는 오류') + ' (' + String(e.filename || '').split('/').pop() + ':' + (e.lineno || '') + ')');
+    if(document.body) show(); else document.addEventListener('DOMContentLoaded', show);
+  }, true);
+})();
+
+/* ───────── 옛 태블릿 대비 ─────────
+   iOS 13 이하·낡은 안드로이드 웹뷰에는 없는 기능을 먼저 채우고,
+   webp 그림을 못 읽으면 같은 이름의 PNG·JPG 사본으로 바꾼다 */
+if(!window.ResizeObserver){
+  window.ResizeObserver = function(cb){ this.cb = cb; };
+  window.ResizeObserver.prototype.observe = function(el){
+    var cb = this.cb, run = function(){ cb([{ target:el }]); };
+    window.addEventListener('resize', run);
+    window.addEventListener('orientationchange', function(){ setTimeout(run, 300); });
+    setTimeout(run, 0);
+  };
+  window.ResizeObserver.prototype.disconnect = function(){};
+}
+if(!Element.prototype.scrollTo) Element.prototype.scrollTo = function(o, y){
+  if(o && typeof o === 'object'){ if(o.top != null) this.scrollTop = o.top; if(o.left != null) this.scrollLeft = o.left; }
+  else { this.scrollLeft = o || 0; this.scrollTop = y || 0; }
+};
+if(!Element.prototype.scrollBy) Element.prototype.scrollBy = function(o, y){
+  if(o && typeof o === 'object'){ this.scrollTop += o.top || 0; this.scrollLeft += o.left || 0; }
+  else { this.scrollLeft += o || 0; this.scrollTop += y || 0; }
+};
+if(!Element.prototype.animate) Element.prototype.animate = function(){ return { cancel:function(){}, finish:function(){} }; };
+var JPG_ASSETS = ["bg-garden", "bg-lab", "cells-bleached", "cells-blue", "cells-fresh", "cells-none"];
+var NO_WEBP = false;
+function assetSrc(src){
+  return src.replace(/assets\/([\w-]+)\.webp/, function(m, n){ return 'assets/' + n + (JPG_ASSETS.indexOf(n) >= 0 ? '.jpg' : '.png'); });
+}
+function useFallbackImages(){
+  if(document.readyState === 'loading'){ document.addEventListener('DOMContentLoaded', useFallbackImages); return; }
+  if(NO_WEBP) return;
+  NO_WEBP = true;
+  var imgs = [].slice.call(document.querySelectorAll('img')).filter(function(im){ return /\.webp$/.test(im.getAttribute('src') || ''); });
+  var left = imgs.length;
+  var done = function(){ left--; if(left === 0 && typeof afterFallbackImages === 'function') afterFallbackImages(); };
+  imgs.forEach(function(im){ im.addEventListener('load', done); im.addEventListener('error', done); im.src = assetSrc(im.getAttribute('src')); });
+}
+/* webp를 읽는 브라우저라도 그림 한 장이 못 불러와지면(학교망 차단 등) 그 그림만 사본으로 */
+function swapOne(im){
+  var s = im.getAttribute('src') || '';
+  if(!/\.webp$/.test(s)) return false;
+  if(typeof afterFallbackImages === 'function') im.addEventListener('load', function(){ afterFallbackImages(); });
+  im.src = assetSrc(s);
+  return true;
+}
+document.addEventListener('error', function(e){ var t = e.target; if(t && t.tagName === 'IMG') swapOne(t); }, true);
+window.addEventListener('load', function(){
+  [].slice.call(document.querySelectorAll('img')).forEach(function(im){ if(im.complete && !im.naturalWidth) swapOne(im); });
+});
+(function(){
+  if(window.__noWebp){ useFallbackImages(); return; }
+  var t = new Image();
+  t.onload = function(){ if(!(t.width > 0)) useFallbackImages(); };
+  t.onerror = useFallbackImages;
+  t.src = 'data:image/webp;base64,UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAARBxAR/Q9ERP8DAABWUDggGAAAABQBAJ0BKgEAAQAAAP4AAA3AAP7mtQAAAA==';
+})();
+</script>
 <style>
 :root{
   --pt:#2456A6; --pt-h:#1C4487; --bg:#F6F8FB; --card:#fff; --line:#E3E9F2;
@@ -542,60 +620,6 @@ button,input{font:inherit;color:inherit;touch-action:manipulation}
 <div class="toast" id="toast" role="status" aria-live="polite"></div>
 
 <script>
-/* ───────── 옛 태블릿 대비 ─────────
-   iOS 13 이하·낡은 안드로이드 웹뷰에는 없는 기능을 먼저 채우고,
-   webp 그림을 못 읽으면 같은 이름의 PNG·JPG 사본으로 바꾼다 */
-if(!window.ResizeObserver){
-  window.ResizeObserver = function(cb){ this.cb = cb; };
-  window.ResizeObserver.prototype.observe = function(el){
-    var cb = this.cb, run = function(){ cb([{ target:el }]); };
-    window.addEventListener('resize', run);
-    window.addEventListener('orientationchange', function(){ setTimeout(run, 300); });
-    setTimeout(run, 0);
-  };
-  window.ResizeObserver.prototype.disconnect = function(){};
-}
-if(!Element.prototype.scrollTo) Element.prototype.scrollTo = function(o, y){
-  if(o && typeof o === 'object'){ if(o.top != null) this.scrollTop = o.top; if(o.left != null) this.scrollLeft = o.left; }
-  else { this.scrollLeft = o || 0; this.scrollTop = y || 0; }
-};
-if(!Element.prototype.scrollBy) Element.prototype.scrollBy = function(o, y){
-  if(o && typeof o === 'object'){ this.scrollTop += o.top || 0; this.scrollLeft += o.left || 0; }
-  else { this.scrollLeft += o || 0; this.scrollTop += y || 0; }
-};
-if(!Element.prototype.animate) Element.prototype.animate = function(){ return { cancel:function(){}, finish:function(){} }; };
-var JPG_ASSETS = ["bg-garden", "bg-lab", "cells-bleached", "cells-blue", "cells-fresh", "cells-none"];
-var NO_WEBP = false;
-function assetSrc(src){
-  return src.replace(/assets\/([\w-]+)\.webp/, function(m, n){ return 'assets/' + n + (JPG_ASSETS.indexOf(n) >= 0 ? '.jpg' : '.png'); });
-}
-function useFallbackImages(){
-  if(NO_WEBP) return;
-  NO_WEBP = true;
-  var imgs = [].slice.call(document.querySelectorAll('img')).filter(function(im){ return /\.webp$/.test(im.getAttribute('src') || ''); });
-  var left = imgs.length;
-  var done = function(){ left--; if(left === 0 && typeof afterFallbackImages === 'function') afterFallbackImages(); };
-  imgs.forEach(function(im){ im.addEventListener('load', done); im.addEventListener('error', done); im.src = assetSrc(im.getAttribute('src')); });
-}
-/* webp를 읽는 브라우저라도 그림 한 장이 못 불러와지면(학교망 차단 등) 그 그림만 사본으로 */
-function swapOne(im){
-  var s = im.getAttribute('src') || '';
-  if(!/\.webp$/.test(s)) return false;
-  if(typeof afterFallbackImages === 'function') im.addEventListener('load', function(){ afterFallbackImages(); });
-  im.src = assetSrc(s);
-  return true;
-}
-document.addEventListener('error', function(e){ var t = e.target; if(t && t.tagName === 'IMG') swapOne(t); }, true);
-window.addEventListener('load', function(){
-  [].slice.call(document.querySelectorAll('img')).forEach(function(im){ if(im.complete && !im.naturalWidth) swapOne(im); });
-});
-(function(){
-  if(window.__noWebp){ useFallbackImages(); return; }
-  var t = new Image();
-  t.onload = function(){ if(!(t.width > 0)) useFallbackImages(); };
-  t.onerror = useFallbackImages;
-  t.src = 'data:image/webp;base64,UklGRkoAAABXRUJQVlA4WAoAAAAQAAAAAAAAAAAAQUxQSAwAAAARBxAR/Q9ERP8DAABWUDggGAAAABQBAJ0BKgEAAQAAAP4AAA3AAP7mtQAAAA==';
-})();
 
 /* ───────── 공통 ───────── */
 const $ = (s, r = document) => r.querySelector(s);
